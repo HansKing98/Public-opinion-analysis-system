@@ -9,6 +9,7 @@ module.exports = {
 
 	url_wrd,
 	url_Wordcloud: url_wrd + "getWordcloud",
-	url_Hotline: url_wrd + "getHotline"
+	url_Hotline: url_wrd + "getHotline",
+	url_Emotion: url_wrd + "getEmotionProportion"
 
 }

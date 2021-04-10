@@ -5,11 +5,11 @@ const {
 } = require('node-modules-common')
 
 const {
-	url_Hotline
+	url_Emotion
 } = require('url-common')
 
 // 爬取对应词云图 已经成功
-const host = url_Hotline
+const host = url_Emotion
 // console.log(host)
 // const db = uniCloud.database();
 // const collection = db.collection('weibo-hot')
