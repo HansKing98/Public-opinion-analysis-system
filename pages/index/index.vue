@@ -23,13 +23,14 @@
 					title: '处理中...'
 				})
 				uniCloud.callFunction({
-					name: 'get-weibo-hot',
+					name: 'get-weiredian',
 					data: {
 						name: 'DCloud',
 						subType: 'uniCloud',
 						createTime: Date.now()
 					}
 				}).then((res) => {
+					console.log("res",res.result)
 					uni.hideLoading()
 					uni.showModal({
 						content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
