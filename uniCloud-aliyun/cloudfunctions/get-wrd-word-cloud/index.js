@@ -1,8 +1,15 @@
 'use strict';
 
-let request = require('sync-request')
+const {
+	request
+} = require('node-modules-common')
+
+const {
+	url_Wordcloud
+} = require('url-common')
+
 // 爬取对应词云图 已经成功
-const host = 'https://m.wrd.cn/getHotline'
+const host = url_Wordcloud
 // const db = uniCloud.database();
 // const collection = db.collection('weibo-hot')
 // const dbCmd = db.command
@@ -15,12 +22,12 @@ exports.main = async (event, context) => {
 		'content-type': 'application/x-www-form-urlencoded'
 	}
 	let data = {
-		"date": "24",
+		"date": "24", // 24,72 可选
 		"searchKeyword1": "幼儿园不得设学前班",
 		"keyword1": "幼儿园不得设学前班",
 		"filterKeyword1": "",
-		"startTime": "2021-04-08 20:47:46",
-		"endTime": "2021-04-09 20:47:46",
+		// "startTime": "2021-04-08 20:47:46",
+		// "endTime": "2021-04-09 20:47:46",
 		"sid": "0"
 	}
 
@@ -29,7 +36,7 @@ exports.main = async (event, context) => {
 		dataStr += `${key}=${data[key]}&`
 	})
 	dataStr = dataStr.substring(0, dataStr.lastIndexOf('&'));
-	console.log("dataStr", dataStr)
+	// console.log("dataStr", dataStr)
 	let res = request('POST', host, {
 		headers,
 		body: dataStr
