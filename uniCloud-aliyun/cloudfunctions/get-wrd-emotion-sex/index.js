@@ -5,11 +5,11 @@ const {
 } = require('node-modules-common')
 
 const {
-	url_Emotion
+	url_EmotionSex
 } = require('url-common')
 
 // 爬取对应词云图 已经成功
-const host = url_Emotion
+const host = url_EmotionSex
 // console.log(host)
 // const db = uniCloud.database();
 // const collection = db.collection('weibo-hot')
@@ -39,8 +39,8 @@ exports.main = async (event, context) => {
 	dataStr = dataStr.substring(0, dataStr.lastIndexOf('&'));
 	// console.log("dataStr", dataStr)
 	let res = request('POST', host, {
-		headers, //HTTP头（默认：{}）
-		body: dataStr //用于PATCH，POST和PUT请求的正文。必须为Buffer或String（客户端仅接受字符串）
+		headers,
+		body: dataStr
 	})
 
 	let resStr = res.getBody('utf8')

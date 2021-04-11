@@ -31,35 +31,36 @@ exports.main = async (event, context) => {
 	let list = $('tbody').find('a')
 	let hotwordnum_list = $('tbody').find('span')
 	console.log('list', list)
-
-	// 目标时区，东8区
-	let targetTimezone = -8
-	// 当前时区与中时区时差，以min为维度
-	let _dif = new Date().getTimezoneOffset()
-	// 本地时区时间 + 时差  = 中时区时间
-	// 目标时区时间 + 时差 = 中时区时间
-	// 目标时区时间 = 本地时区时间 + 本地时区时差 - 目标时区时差
-	// 东8区时间
-	let east8time = new Date().getTime() + _dif * 60 * 1000 - (targetTimezone * 60 * 60 * 1000)
-	let date = new Date(east8time)
-	console.log("time", date)
-
 	for (var i = 1; i <= 20; i++) {
 		// 跳过第一条 不是热搜
 		// 每分钟 抓取前二十条
 		let hotword = list.eq(i).text()
 		let hotwordnum = hotwordnum_list.eq(i).text()
+		// 查到热度值变大 更新数据
+		let searched = await collection.where({
+			hotword
+		}).get()
+		if (!!searched.data[0] && parseInt(hotwordnum) > parseInt(searched.data[0].hotwordnum)) {
+			collection.where({
+				hotword
+			}).update({
+				hotwordnum,
+				'update_time': new Date()
+			})
+			// console.log(hotword, hotwordnum, searched.data[0].hotwordnum, )
+		}
 
+		// 查到存在 插入数据
 		let exist = await collection.where({
-			'hotword': hotword
+			hotword
 		}).count()
-
-		console.log(exist.total)
+		// console.log(searched.data[0].hotwordnum > hotwordnum, searched, !exist.total)
 		if (!exist.total) {
 			let hotItem = {
-				hotword: hotword,
-				hotwordnum: hotwordnum,
-				'create_time': new Date()
+				hotword,
+				hotwordnum,
+				'create_time': new Date(),
+				'update_time': new Date()
 			}
 			// console.log('hotword：', hotword)
 			// console.log("hotwordnum", parseInt(hotwordnum) + 1)
