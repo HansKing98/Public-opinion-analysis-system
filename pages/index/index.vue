@@ -2,8 +2,12 @@
 	<view class="content">
 		<view class="card-bg">
 			<leo-list :show-icon="true" :show-arrow="true" :list="list"></leo-list>
+			<skeleton :loading="loading" :avatarSize="skeleton1.avatarSize" :avatarShape="'square'" :row="skeleton1.row"
+				:showTitle="skeleton1.showTitle" :animate="skeleton1.animate" v-for="(i,index) in 8" :key="index">
+			</skeleton>
 			<u-loadmore :status="status" @loadmore="getMore()" />
 		</view>
+
 	</view>
 </template>
 
@@ -17,6 +21,13 @@
 				pageData: {
 					page: 0,
 					pageSize: 11,
+				},
+				loading: true,
+				skeleton1: {
+					avatarSize: '40px',
+					row: 1,
+					showTitle: true,
+					animate: true
 				}
 			}
 		},
@@ -40,6 +51,7 @@
 						// 已经加载了全部数据
 						this.status = "nomore"
 					}
+					this.loading = false;
 					uni.hideLoading()
 					// uni.showModal({
 					// 	content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,

@@ -1,6 +1,6 @@
 <template>
 	<view class="leo-list">
-		<template v-if="sycnList.length">
+		<template v-if="sycnList">
 			<view class="uni-flex uni-row leo-align-items-center leo-space-between leo-list-item"
 				v-for="(item, index) in list" :key="index" @click="check(item)">
 				<view class="uni-flex uni-row leo-align-items-center">
@@ -61,10 +61,10 @@
 			}
 		},
 
-
 		watch: {
 			list(n, o) { //n为新值,o为旧值;
 				this.sycnList = n;
+				this.loading = false
 			}
 		},
 
