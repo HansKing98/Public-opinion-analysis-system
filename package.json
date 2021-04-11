@@ -1,0 +1,26 @@
+{
+  "name": "public-opinion-analysis-system",
+  "version": "1.0.0",
+  "description": "舆情获取及分析系统",
+  "main": "main.js",
+  "dependencies": {
+    "node-sass": "^5.0.0",
+    "uview-ui": "^1.8.4"
+  },
+  "devDependencies": {
+    "node-sass": "^5.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HansKing98/Public-opinion-analysis-system.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HansKing98/Public-opinion-analysis-system/issues"
+  },
+  "homepage": "https://github.com/HansKing98/Public-opinion-analysis-system#readme"
+}

@@ -1,8 +1,7 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
-			<text class="title">{{title}}</text>
+			<u-button>舆情分析系统</u-button>
 		</view>
 	</view>
 </template>
@@ -23,14 +22,14 @@
 					title: '处理中...'
 				})
 				uniCloud.callFunction({
-					name: 'get-weiredian',
+					name: 'get-weibo-hot',
 					data: {
 						name: 'DCloud',
 						subType: 'uniCloud',
 						createTime: Date.now()
 					}
 				}).then((res) => {
-					console.log("res",res.result)
+					console.log("res", res.result)
 					uni.hideLoading()
 					uni.showModal({
 						content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
