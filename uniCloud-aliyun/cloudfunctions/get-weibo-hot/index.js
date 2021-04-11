@@ -5,10 +5,25 @@ const db = uniCloud.database()
  * 
  */
 exports.main = async (event, context) => {
-	event.pageNum = 0
-	event.pageSize = 5
-	console.log(event)
+	let page = parseInt(event.page)
+	let pageSize = parseInt(event.pageSize) || 5
+	// console.log(event)
 	const collection = db.collection('weibo-hot-20')
-	const res = await collection.skip(event.pageNum).limit(event.pageSize).orderBy("create_time", "desc").get()
+
+	console.log('page:', page, 'size:', pageSize)
+
+	let count = await collection.count()
+	count = count.total
+	let begin = page * pageSize
+
+	console.log('count:', count, 'begin:', begin)
+
+	let res
+	if (page * pageSize < count) {
+		res = await collection.orderBy("update_time", "asc").skip(begin).limit(pageSize).get()
+	} else {
+		res = await collection.orderBy("update_time", "asc").skip(page * pageSize).get()
+	}
+
 	return res
 };

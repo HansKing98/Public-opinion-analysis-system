@@ -16,14 +16,15 @@ exports.main = async (event, context) => {
 		'X-Requested-With': 'XMLHttpRequest',
 		'Cookie': "username = "
 	}
+	// console.log("event", event)
 	let res = request('POST', host, {
 		headers,
 		json: {
 			"timeType": "1",
 			"sort": "7",
 			"labels": "1010",
-			"page": "1",
-			"pageSize": "20",
+			"page": event.page,
+			"pageSize": event.pageSize,
 		}
 	})
 	// var html = JSON.parse(res.getBody('utf8'));

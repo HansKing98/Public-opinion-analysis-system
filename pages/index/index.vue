@@ -1,7 +1,8 @@
 <template>
 	<view class="content">
-		<view class="text-area">
-			<u-button>舆情分析系统</u-button>
+		<view class="card-bg">
+			<leo-list :show-icon="true" :show-arrow="true" :list="list"></leo-list>
+			<u-loadmore :status="status" @loadmore="getMore()" />
 		</view>
 	</view>
 </template>
@@ -10,7 +11,13 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello',
+				list: [],
+				status: 'loadmore',
+				pageData: {
+					page: 0,
+					pageSize: 11,
+				}
 			}
 		},
 		onLoad() {
@@ -19,22 +26,25 @@
 		methods: {
 			get() {
 				uni.showLoading({
-					title: '处理中...'
+					title: '正在加载更多...'
 				})
+
 				uniCloud.callFunction({
 					name: 'get-weibo-hot',
-					data: {
-						name: 'DCloud',
-						subType: 'uniCloud',
-						createTime: Date.now()
-					}
+					data: this.pageData
 				}).then((res) => {
-					console.log("res", res.result)
+					this.list.push.apply(this.list, res.result.data);
+					// 是否读到最后一条
+					console.log(this.list.length)
+					if (res.result.data.length == 0) {
+						// 已经加载了全部数据
+						this.status = "nomore"
+					}
 					uni.hideLoading()
-					uni.showModal({
-						content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
-						showCancel: false
-					})
+					// uni.showModal({
+					// 	content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
+					// 	showCancel: false
+					// })
 					console.log(res)
 				}).catch((err) => {
 					uni.hideLoading()
@@ -45,34 +55,43 @@
 					console.error(err)
 				})
 			},
+			getMore() {
+				this.status = 'loading';
+				this.pageData.page += 1
+				this.get()
+			}
+		},
+		// 触底事件
+		onReachBottom() {
+			this.getMore()
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	page {
+		background: #f5f7fa;
+	}
+
 	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		/* #ifdef APP-PLUS */
+		padding-top: var(--status-bar-height);
+		/* #endif */
+		/* #ifndef APP-PLUS */
+		padding-top: 1rpx;
+		/* #endif */
+		padding-bottom: 1rpx;
+		// min-height: calc(100vh - var(--status-bar-height));
+		// background: linear-gradient(to, #3377ff,  #f5f7fa 564rpx);
+
+		background: #f5f7fa;
 	}
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+	.card-bg {
+		margin: 24rpx 24rpx;
+		padding: 24rpx 32rpx;
+		background: #ffffff;
+		border-radius: 20rpx;
+		box-shadow: 0px 4rpx 20rpx 0rpx rgba(235, 241, 244, 0.35);
 	}
 </style>
