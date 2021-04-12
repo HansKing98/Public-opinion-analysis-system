@@ -59,9 +59,9 @@
 			// 静态数据
 			this.getServerData()
 			// 云数据库数据
-			// this.get({
-			// 	hotword: this.hotword
-			// })
+			this.get({
+				hotword: this.hotword
+			})
 
 		},
 		methods: {
@@ -70,11 +70,12 @@
 				setTimeout(() => {
 					//因部分数据格式一样，这里不同图表引用同一数据源的话，需要深拷贝一下构造不同的对象
 					//开发者需要自行处理服务器返回的数据，应与标准数据格式一致，注意series的data数值应为数字格式
-					this.chartDataWord = chartDataWord
+					// this.chartDataWord = chartDataWord
 					this.chartDataRing = chartDataRing
 					this.chartDataMix = chartDataMix
 
-				}, 1000)
+				// }, 1000)
+				})
 			},
 			get(data) {
 				uni.showLoading({
