@@ -74,7 +74,7 @@
 					this.chartDataRing = chartDataRing
 					this.chartDataMix = chartDataMix
 
-				// }, 1000)
+					// }, 1000)
 				})
 			},
 			get(data) {
@@ -85,13 +85,16 @@
 					name: 'get-wrd-word-cloud',
 					data
 				}).then((res) => {
-					// console.log(res.result.data)
-					let li = eval(res.result.data[0].li)
-					this.chartDataWord = makeWordCloud(li)
+					console.log(res.result)
+					// let li = eval(res.result.data[0].li)
+					// this.chartDataWord = makeWordCloud(li)
+					this.chartDataWord = res.result
+					
 					console.log("li", this.chartDataWord)
 					uni.hideLoading()
 				}).catch((err) => {
 					uni.hideLoading()
+					this.chartDataWord = chartDataWord
 					uni.showModal({
 						content: `查询失败，错误信息为：${err.message}`,
 						showCancel: false

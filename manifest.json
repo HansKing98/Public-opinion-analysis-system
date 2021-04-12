@@ -2,8 +2,8 @@
     "name" : "舆情分析系统",
     "appid" : "__UNI__2FF3E10",
     "description" : "舆情获取及分析系统的设计与实现",
-    "versionName" : "1.0.2",
-    "versionCode" : 102,
+    "versionName" : "1.0.3",
+    "versionCode" : 103,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
