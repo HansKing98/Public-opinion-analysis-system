@@ -7,7 +7,6 @@
 			</skeleton>
 			<u-loadmore :status="status" @loadmore="getMore()" />
 		</view>
-
 	</view>
 </template>
 
@@ -31,7 +30,7 @@
 				}
 			}
 		},
-		onLoad() {
+		mounted() {
 			this.get()
 		},
 		methods: {

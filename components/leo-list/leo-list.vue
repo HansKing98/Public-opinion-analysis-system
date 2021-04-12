@@ -2,7 +2,7 @@
 	<view class="leo-list">
 		<template v-if="sycnList">
 			<view class="uni-flex uni-row leo-align-items-center leo-space-between leo-list-item"
-				v-for="(item, index) in list" :key="index" @click="check(item)">
+				v-for="(item, index) in list" :key="index" @click="check(item.hotword)">
 				<view class="uni-flex uni-row leo-align-items-center">
 					<view class="leo-align-items-center" v-if="item.isHuati" style="padding-right: 30rpx;">
 						<image class="icon" :style="{'border-radius': + borderRadius + 'rpx'}" :src="item.portrait"
@@ -69,8 +69,20 @@
 		},
 
 		methods: {
-			check(item) {
-				console.log("跳转到钻取页面");
+			check(hotword) {
+				let params = {hotword}
+				let url = '../../pages/analysis/analysis?hotword='
+				this.pageTo(url, params)
+				console.log("跳转到钻取页面", hotword);
+			},
+			pageTo(url, params) {
+				const {
+					hotword
+				} = params
+				//在起始页面跳转到test.vue页面并传递参数
+				uni.navigateTo({
+					url: url + hotword
+				});
 			}
 		},
 		mounted() {
