@@ -33,6 +33,10 @@
 		mounted() {
 			this.get()
 		},
+		onPullDownRefresh() {
+			Object.assign(this.$data.pageData, this.$options.data().pageData)
+			this.get();
+		},
 		methods: {
 			get() {
 				uni.showLoading({
@@ -64,6 +68,8 @@
 						showCancel: false
 					})
 					console.error(err)
+				}).finally(() => {
+					uni.stopPullDownRefresh()
 				})
 			},
 			getMore() {
