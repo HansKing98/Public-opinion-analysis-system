@@ -1,4 +1,4 @@
-export const chartsDataWord = {
+export const chartDataWord = {
 	"series": [{
 			"name": "跨全端图表",
 			"textSize": 25
@@ -66,6 +66,77 @@ export const chartsDataWord = {
 		{
 			"name": "跨全端",
 			"textSize": 12
+		}
+	]
+}
+
+export const chartDataRing = {
+	"series": [{
+		"data": [{
+				"name": "非敏感",
+				"value": 15
+			},
+			{
+				"name": "中性",
+				"value": 5
+			},
+			{
+				"name": "敏感",
+				"value": 80
+			}
+		]
+	}]
+}
+
+export const chartDataMix = {
+	"categories": [
+		"2016",
+		"2017",
+		"2018",
+		"2019",
+		"2020",
+		"2021"
+	],
+	"series": [{
+			"name": "曲面",
+			"data": [
+				70,
+				50,
+				85,
+				130,
+				64,
+				88
+			],
+			"type": "area",
+			"style": "curve"
+		},
+		{
+			"name": "曲线",
+			"data": [
+				70,
+				50,
+				85,
+				130,
+				64,
+				88
+			],
+			"type": "line",
+			"style": "curve",
+			"color": "#1890ff",
+			"disableLegend": true
+		},
+		{
+			"name": "折线",
+			"data": [
+				120,
+				140,
+				105,
+				170,
+				95,
+				160
+			],
+			"type": "line",
+			"color": "#2fc25b"
 		}
 	]
 }

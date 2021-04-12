@@ -20,61 +20,69 @@
 const color = ['#1890FF', '#91CB74', '#FAC858', '#EE6666', '#73C0DE', '#3CA272', '#FC8452', '#9A60B4', '#ea7ccc'];
 
 module.exports = {
-  //demotype为自定义图表类型
-	"type":["pie","ring","rose","word","funnel","map","arcbar","line","column","area","radar","gauge","candle","mix","demotype"],
-	"range":["饼状图","圆环图","玫瑰图","词云图","漏斗图","地图","圆弧进度条","折线图","柱状图","区域图","雷达图","仪表盘","K线图","混合图","自定义类型"],
-  //增加自定义图表类型，如果需要categories，请在这里加入您的图表类型例如最后的"demotype"
-	"categories":["line","column","area","radar","gauge","candle","mix","demotype"],
-  //instance为实例变量承载属性，option为eopts承载属性，不要删除
-  "instance":{},
-  "option":{},
-  //下面是自定义format配置，因除H5端外的其他端无法通过props传递函数，只能通过此属性对应下标的方式来替换
-  "formatter":{
-    "yAxisDemo1":function(val){return val+'元'},
-    "yAxisDemo2":function(val){return val.toFixed(2)},
-    "seriesDemo1":function(val){
-      return val+'元'
-    },
-    "tooltipDemo1":function(item, category, index, opts){
-      if(index==0){
-      	return '随便用'+item.data+'年'
-      }else{
-      	return '其他我没改'+item.data+'天'
-      }
-    },
-    "pieDemo":function(val, index, series){
-      if(index !== undefined){
-        return series[index].name+'：'+series[index].data+'元'
-      }
-    },
-  },
-  //这里演示了自定义您的图表类型的option，可以随意命名，之后在组件上 type="demotype" 后，组件会调用这个花括号里的option，如果组件上还存在opts参数，会将demotype与opts中option合并后渲染图表。
-  "demotype":{
-    //我这里把曲线图当做了自定义图表类型，您可以根据需要随意指定类型或配置
-    "type": "line",
-    "color": color,
-    "padding": [15,10,0,15],
-    "xAxis": {
-      "disableGrid": true,
-    },
-    "yAxis": {
-      "gridType": "dash",
-      "dashLength": 2,
-    },
-    "legend": {
-    },
-    "extra": {
-    	"line": {
-    		"type": "curve",
-    		"width": 2
-    	},
-    }
-  },
-  //下面是自定义配置，请添加项目所需的通用配置
-	"pie":{
+	//demotype为自定义图表类型
+	"type": ["pie", "ring", "MinGanPRing", "rose", "word", "funnel", "map", "arcbar", "line", "column", "area",
+		"radar", "gauge",
+		"candle", "mix", "demotype"
+	],
+	"range": ["饼状图", "圆环图", "玫瑰图", "词云图", "漏斗图", "地图", "圆弧进度条", "折线图", "柱状图", "区域图", "雷达图", "仪表盘", "K线图", "混合图",
+		"自定义类型"
+	],
+	//增加自定义图表类型，如果需要categories，请在这里加入您的图表类型例如最后的"demotype"
+	"categories": ["line", "column", "area", "radar", "gauge", "candle", "mix", "demotype", "MinGanPRing"],
+	//instance为实例变量承载属性，option为eopts承载属性，不要删除
+	"instance": {},
+	"option": {},
+	//下面是自定义format配置，因除H5端外的其他端无法通过props传递函数，只能通过此属性对应下标的方式来替换
+	"formatter": {
+		"yAxisDemo1": function(val) {
+			return val + '元'
+		},
+		"yAxisDemo2": function(val) {
+			return val.toFixed(2)
+		},
+		"seriesDemo1": function(val) {
+			return val + '元'
+		},
+		"tooltipDemo1": function(item, category, index, opts) {
+			if (index == 0) {
+				return '随便用' + item.data + '年'
+			} else {
+				return '其他我没改' + item.data + '天'
+			}
+		},
+		"pieDemo": function(val, index, series) {
+			if (index !== undefined) {
+				return series[index].name + '：' + series[index].data + '元'
+			}
+		},
+	},
+	//这里演示了自定义您的图表类型的option，可以随意命名，之后在组件上 type="demotype" 后，组件会调用这个花括号里的option，如果组件上还存在opts参数，会将demotype与opts中option合并后渲染图表。
+	"demotype": {
+		//我这里把曲线图当做了自定义图表类型，您可以根据需要随意指定类型或配置
+		"type": "line",
+		"color": color,
+		"padding": [15, 10, 0, 15],
+		"xAxis": {
+			"disableGrid": true,
+		},
+		"yAxis": {
+			"gridType": "dash",
+			"dashLength": 2,
+		},
+		"legend": {},
+		"extra": {
+			"line": {
+				"type": "curve",
+				"width": 2
+			},
+		}
+	},
+	//下面是自定义配置，请添加项目所需的通用配置
+	"pie": {
 		"type": "pie",
-    "color": color,
-		"padding": [5,5,5,5],
+		"color": color,
+		"padding": [5, 5, 5, 5],
 		"extra": {
 			"pie": {
 				"activeOpacity": 0.5,
@@ -87,48 +95,214 @@ module.exports = {
 			},
 		}
 	},
-	"ring":{
+	"MinGanPRing": {
 		"type": "ring",
-    "color": color,
-		"padding": [5,5,5,5],
+		"canvasId": "",
+		"canvas2d": false,
+		"background": "none",
+		"animation": true,
+		"timing": "easeOut",
+		"duration": 1000,
+		"color": [
+			"#1890FF",
+			"#91CB74",
+			"#FAC858",
+			"#EE6666",
+			"#73C0DE",
+			"#3CA272",
+			"#FC8452",
+			"#9A60B4",
+			"#ea7ccc"
+		],
+		"padding": [
+			5,
+			5,
+			5,
+			5
+		],
 		"rotate": false,
+		"reserve": false,
+		"fontSize": 13,
+		"fontColor": "#666666",
+		"enableScroll": false,
+		"touchMoveLimit": 60,
+		"enableMarkLine": false,
 		"dataLabel": true,
+		"dataPointShape": true,
+		"dataPointShapeType": "solid",
+		"legend": {
+			"show": true,
+			"position": "top",
+			"float": "right",
+			"padding": 5,
+			"margin": 5,
+			"backgroundColor": "rgba(0,0,0,0)",
+			"borderColor": "rgba(0,0,0,0)",
+			"borderWidth": 12,
+			"fontSize": 13,
+			"fontColor": "#666666",
+			"lineHeight": 25,
+			"hiddenColor": "#CECECE",
+			"itemGap": 10
+		},
+		"title": {
+			"name": "",
+			"fontSize": 15,
+			"color": "#666666",
+			"offsetX": 0,
+			"offsetY": 0
+		},
+		"subtitle": {
+			"name": "",
+			"fontSize": 0,
+			"color": "#7cb5ec",
+			"offsetX": 0,
+			"offsetY": 0
+		},
+		"extra": {
+			"ring": {
+				"ringWidth": 60,
+				"activeOpacity": 0.5,
+				"activeRadius": 20,
+				"offsetAngle": 0,
+				"customRadius": 0,
+				"labelWidth": 10,
+				"border": true,
+				"borderWidth": 3,
+				"borderColor": "#FFFFFF",
+				"linearType": "custom"
+			},
+			"tooltip": {
+				"showBox": true,
+				"showArrow": true,
+				"borderWidth": 0,
+				"borderRadius": 0,
+				"borderColor": "#000000",
+				"borderOpacity": 0.7,
+				"bgColor": "#000000",
+				"bgOpacity": 0.7,
+				"gridType": "solid",
+				"dashLength": 4,
+				"gridColor": "#CCCCCC",
+				"fontColor": "#FFFFFF",
+				"splitLine": true,
+				"horizentalLine": false,
+				"xAxisLabel": false,
+				"yAxisLabel": false,
+				"labelBgColor": "#FFFFFF",
+				"labelBgOpacity": 0.7,
+				"labelFontColor": "#666666"
+			}
+		}
+	},
+	"ring": {
+		"type": "ring",
+		"canvasId": "",
+		"canvas2d": false,
+		"background": "none",
+		"animation": true,
+		"timing": "easeIn",
+		"duration": 1000,
+		"color": [
+			"#1890FF",
+			"#91CB74",
+			"#FAC858",
+			"#EE6666",
+			"#73C0DE",
+			"#3CA272",
+			"#FC8452",
+			"#9A60B4",
+			"#ea7ccc"
+		],
+		"padding": [
+			5,
+			5,
+			5,
+			5
+		],
+		"rotate": false,
+		"reserve": false,
+		"fontSize": 13,
+		"fontColor": "#666666",
+		"enableScroll": false,
+		"touchMoveLimit": 60,
+		"enableMarkLine": false,
+		"dataLabel": true,
+		"dataPointShape": true,
+		"dataPointShapeType": "solid",
 		"legend": {
 			"show": true,
 			"position": "right",
-      "lineHeight": 25,
+			"float": "center",
+			"padding": 5,
+			"margin": 5,
+			"backgroundColor": "rgba(0,0,0,0)",
+			"borderColor": "rgba(0,0,0,0)",
+			"borderWidth": 0,
+			"fontSize": 13,
+			"fontColor": "#666666",
+			"lineHeight": 25,
+			"hiddenColor": "#CECECE",
+			"itemGap": 10
 		},
 		"title": {
 			"name": "收益率",
 			"fontSize": 15,
-			"color": "#666666"
+			"color": "#666666",
+			"offsetX": 0,
+			"offsetY": 0
 		},
 		"subtitle": {
 			"name": "70%",
 			"fontSize": 25,
-			"color": "#7cb5ec"
+			"color": "#7cb5ec",
+			"offsetX": 0,
+			"offsetY": 0
 		},
 		"extra": {
 			"ring": {
-				"ringWidth":30,
+				"ringWidth": 30,
 				"activeOpacity": 0.5,
 				"activeRadius": 10,
 				"offsetAngle": 0,
+				"customRadius": 0,
 				"labelWidth": 15,
 				"border": true,
 				"borderWidth": 3,
-				"borderColor": "#FFFFFF"
+				"borderColor": "#FFFFFF",
+				"linearType": "none"
 			},
-		},
+			"tooltip": {
+				"showBox": true,
+				"showArrow": true,
+				"borderWidth": 0,
+				"borderRadius": 0,
+				"borderColor": "#000000",
+				"borderOpacity": 0.7,
+				"bgColor": "#000000",
+				"bgOpacity": 0.7,
+				"gridType": "solid",
+				"dashLength": 4,
+				"gridColor": "#CCCCCC",
+				"fontColor": "#FFFFFF",
+				"splitLine": true,
+				"horizentalLine": false,
+				"xAxisLabel": false,
+				"yAxisLabel": false,
+				"labelBgColor": "#FFFFFF",
+				"labelBgOpacity": 0.7,
+				"labelFontColor": "#666666"
+			}
+		}
 	},
-	"rose":{
+	"rose": {
 		"type": "rose",
-    "color": color,
-		"padding": [5,5,5,5],
+		"color": color,
+		"padding": [5, 5, 5, 5],
 		"legend": {
 			"show": true,
 			"position": "left",
-      "lineHeight": 25,
+			"lineHeight": 25,
 		},
 		"extra": {
 			"rose": {
@@ -144,9 +318,35 @@ module.exports = {
 			},
 		}
 	},
-	"word":{
+	"word": {
 		"type": "word",
-    "color": color,
+		"canvasId": "",
+		"canvas2d": false,
+		"background": "none",
+		"animation": true,
+		"timing": "easeOut",
+		"duration": 1000,
+		"color": [
+			"#1890FF",
+			"#91CB74",
+			"#FAC858",
+			"#EE6666",
+			"#73C0DE",
+			"#3CA272",
+			"#FC8452",
+			"#9A60B4",
+			"#ea7ccc"
+		],
+		"rotate": false,
+		"reserve": false,
+		"fontSize": 13,
+		"fontColor": "#666666",
+		"enableScroll": false,
+		"touchMoveLimit": 60,
+		"enableMarkLine": false,
+		"dataLabel": true,
+		"dataPointShape": true,
+		"dataPointShapeType": "solid",
 		"extra": {
 			"word": {
 				"type": "normal",
@@ -154,10 +354,10 @@ module.exports = {
 			}
 		}
 	},
-	"funnel":{
+	"funnel": {
 		"type": "funnel",
-    "color": color,
-		"padding": [15,15,0,15],
+		"color": color,
+		"padding": [15, 15, 0, 15],
 		"extra": {
 			"funnel": {
 				"activeOpacity": 0.3,
@@ -170,11 +370,11 @@ module.exports = {
 			},
 		}
 	},
-	"map":{
+	"map": {
 		"type": "map",
-    "color": color,
-		"padding": [0,0,0,0],
-    "dataLabel": true,
+		"color": color,
+		"padding": [0, 0, 0, 0],
+		"dataLabel": true,
 		"extra": {
 			"map": {
 				"border": true,
@@ -187,9 +387,9 @@ module.exports = {
 			},
 		}
 	},
-	"arcbar":{
+	"arcbar": {
 		"type": "arcbar",
-    "color": color,
+		"color": color,
 		"title": {
 			"name": "百分比",
 			"fontSize": 25,
@@ -211,19 +411,18 @@ module.exports = {
 			}
 		}
 	},
-	"line":{
+	"line": {
 		"type": "line",
-    "color": color,
-		"padding": [15,10,0,15],
+		"color": color,
+		"padding": [15, 10, 0, 15],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
 		"yAxis": {
-      "gridType": "dash",
-      "dashLength": 2,
+			"gridType": "dash",
+			"dashLength": 2,
 		},
-		"legend": {
-		},
+		"legend": {},
 		"extra": {
 			"line": {
 				"type": "straight",
@@ -231,17 +430,15 @@ module.exports = {
 			},
 		}
 	},
-	"column":{
+	"column": {
 		"type": "column",
-    "color": color,
-		"padding": [15,15,0,5],
+		"color": color,
+		"padding": [15, 15, 0, 5],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
-		"yAxis": {
-		},
-		"legend": {
-		},
+		"yAxis": {},
+		"legend": {},
 		"extra": {
 			"column": {
 				"type": "group",
@@ -253,19 +450,18 @@ module.exports = {
 			},
 		}
 	},
-	"area":{
+	"area": {
 		"type": "area",
 		"color": color,
-		"padding": [15,15,0,15],
+		"padding": [15, 15, 0, 15],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
 		"yAxis": {
-      "gridType": "dash",
-      "dashLength": 2,
+			"gridType": "dash",
+			"dashLength": 2,
 		},
-		"legend": {
-		},
+		"legend": {},
 		"extra": {
 			"area": {
 				"type": "straight",
@@ -276,14 +472,14 @@ module.exports = {
 			},
 		}
 	},
-	"radar":{
+	"radar": {
 		"type": "radar",
 		"color": color,
-		"padding": [5,5,5,5],
+		"padding": [5, 5, 5, 5],
 		"legend": {
 			"show": true,
 			"position": "right",
-      "lineHeight": 25,
+			"lineHeight": 25,
 		},
 		"extra": {
 			"radar": {
@@ -296,7 +492,7 @@ module.exports = {
 			},
 		}
 	},
-	"gauge":{
+	"gauge": {
 		"type": "gauge",
 		"color": color,
 		"title": {
@@ -336,10 +532,10 @@ module.exports = {
 			}
 		}
 	},
-	"candle":{
+	"candle": {
 		"type": "candle",
 		"color": color,
-		"padding": [15,15,0,15],
+		"padding": [15, 15, 0, 15],
 		"enableScroll": true,
 		"enableMarkLine": true,
 		"dataLabel": false,
@@ -355,10 +551,8 @@ module.exports = {
 			"scrollColor": "#A6A6A6",
 			"scrollBackgroundColor": "#EFEBEF"
 		},
-		"yAxis": {
-		},
-		"legend": {
-		},
+		"yAxis": {},
+		"legend": {},
 		"extra": {
 			"candle": {
 				"color": {
@@ -369,16 +563,15 @@ module.exports = {
 				},
 				"average": {
 					"show": true,
-					"name": ["MA5","MA10","MA30"],
-					"day": [5,10,20],
-					"color": ["#1890ff","#2fc25b","#facc14"]
+					"name": ["MA5", "MA10", "MA30"],
+					"day": [5, 10, 20],
+					"color": ["#1890ff", "#2fc25b", "#facc14"]
 				}
 			},
 			"markLine": {
 				"type": "dash",
 				"dashLength": 5,
-				"data": [
-					{
+				"data": [{
 						"value": 2150,
 						"lineColor": "#f04864",
 						"showLabel": true
@@ -392,12 +585,12 @@ module.exports = {
 			}
 		}
 	},
-	"mix":{
+	"mix": {
 		"type": "mix",
 		"color": color,
-		"padding": [15,15,0,15],
+		"padding": [15, 15, 0, 15],
 		"xAxis": {
-      "disableGrid": true,
+			"disableGrid": true,
 		},
 		"yAxis": {
 			"disabled": false,
@@ -410,8 +603,7 @@ module.exports = {
 			"showTitle": true,
 			"data": []
 		},
-		"legend": {
-		},
+		"legend": {},
 		"extra": {
 			"mix": {
 				"column": {
@@ -420,14 +612,14 @@ module.exports = {
 			},
 		}
 	},
-	"point":{
+	"point": {
 		"type": "point",
-		"color":color,
-		"padding":[15,15,0,15],
+		"color": color,
+		"padding": [15, 15, 0, 15],
 	},
-	"bubble":{
+	"bubble": {
 		"type": "bubble",
-		"color":color,
-		"padding":[15,15,0,15],
+		"color": color,
+		"padding": [15, 15, 0, 15],
 	}
 }

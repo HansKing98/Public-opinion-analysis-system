@@ -73,7 +73,7 @@
 				let params = {hotword}
 				let url = '../../pages/analysis/analysis?hotword='
 				this.pageTo(url, params)
-				console.log("跳转到钻取页面", hotword);
+				// console.log("跳转到钻取页面", hotword);
 			},
 			pageTo(url, params) {
 				const {

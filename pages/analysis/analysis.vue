@@ -8,8 +8,19 @@
 		配置参数请用在线生成工具(http://demo.ucharts.cn/)生成
 		3、class="charts-box"这个样式，指定了高度，如果你的父元素有固定高度，请修改为height:100%
 		-->
+		<u-cell-item icon="heart-fill" title="舆情词云图" arrow hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box">
-			<qiun-data-charts type="word" :chartData="chartsDataWord" background="none" :animation="false" />
+			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none" />
+		</view>
+
+		<u-cell-item icon="heart-fill" title="敏感占比" hover-class="cell-hover-class"></u-cell-item>
+		<view class="charts-box">
+			<qiun-data-charts type="MinGanPRing" :chartData="chartDataRing" :loadingType="3" background="none"
+				:animation="true" />
+		</view>
+		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
+		<view class="charts-box">
+			<qiun-data-charts type="mix" :chartData="chartDataMix" background="none" :animation="true" />
 		</view>
 	</view>
 </template>
@@ -19,7 +30,9 @@
 	import demodata from '@/mockdata/demodata.json';
 	import mapdata from '@/mockdata/mapdata.json'
 	import {
-		chartsDataWord
+		chartDataWord,
+		chartDataRing,
+		chartDataMix
 	} from './chartsData.js'
 	import {
 		makeWordCloud
@@ -28,11 +41,13 @@
 		data() {
 			return {
 				hotword: "",
-				chartsDataWord: {},
+				chartDataWord: {},
+				chartDataRing: {},
+				chartDataMix: {}
 			}
 		},
 		onLoad(option) {
-			console.log("hotword", option.hotword)
+			// console.log("hotword", option.hotword)
 			this.hotword = option.hotword
 			uni.setNavigationBarTitle({
 				title: option.hotword
@@ -41,40 +56,38 @@
 		onReady() {
 			//模拟从服务器获取数据
 			// console.log("2")
-			// this.getServerData()
-			this.get({
-				hotword: this.hotword
-			})
-			
+			// 静态数据
+			this.getServerData()
+			// 云数据库数据
+			// this.get({
+			// 	hotword: this.hotword
+			// })
+
 		},
 		methods: {
 			getServerData() {
-				// console.log("2", chartsDataWord)
+				// console.log("2", chartDataWord)
 				setTimeout(() => {
 					//因部分数据格式一样，这里不同图表引用同一数据源的话，需要深拷贝一下构造不同的对象
 					//开发者需要自行处理服务器返回的数据，应与标准数据格式一致，注意series的data数值应为数字格式
-					this.chartsDataWord = chartsDataWord
-				})
+					this.chartDataWord = chartDataWord
+					this.chartDataRing = chartDataRing
+					this.chartDataMix = chartDataMix
+
+				}, 1000)
 			},
 			get(data) {
 				uni.showLoading({
 					title: '正在加载更多...'
 				})
-
 				uniCloud.callFunction({
 					name: 'get-wrd-word-cloud',
 					data
 				}).then((res) => {
 					// console.log(res.result.data)
 					let li = eval(res.result.data[0].li)
-
-
-					this.chartsDataWord = makeWordCloud(li)
-					console.log("li", this.chartsDataWord)
-					// uni.showModal({
-					// 	content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
-					// 	showCancel: false
-					// })
+					this.chartDataWord = makeWordCloud(li)
+					console.log("li", this.chartDataWord)
 					uni.hideLoading()
 				}).catch((err) => {
 					uni.hideLoading()
@@ -100,5 +113,10 @@
 	.charts-box {
 		width: 100%;
 		height: 300px;
+	}
+
+	/*每个页面公共css */
+	.cell-hover-class {
+		background-color: rgb(235, 237, 238);
 	}
 </style>
