@@ -33,7 +33,7 @@ exports.main = async (event, context) => {
 	let hotwordnum_list = $('tbody').find('span')
 
 	console.log('list', list)
-	for (var i = 1; i <= 20; i++) {
+	for (var i = 20; i >= 1; i--) {
 		// 跳过第一条 不是热搜
 		// 每分钟 抓取前二十条
 		let hotword = list.eq(i).text()
@@ -74,17 +74,33 @@ exports.main = async (event, context) => {
 			let searched = await collection.where({
 				hotword
 			}).get()
-			if (!!searched.data[0] && parseInt(hotwordnum) > parseInt(searched.data[0].hotwordnum)) {
-				collection.where({
-					hotword
-				}).update({
-					isHuati,
-					portrait: isHuati ? portrait : undefined,
-					rc_head_data: isHuati ? rc_head_data : undefined,
-					hotwordnum,
-					'update_time': new Date()
-				})
-				// console.log(hotword, hotwordnum, searched.data[0].hotwordnum, )
+			if (!!searched.data[0]) {
+				if (parseInt(hotwordnum) > parseInt(searched.data[0].hotwordnum)) {
+
+
+					collection.where({
+						hotword
+					}).update({
+						isHuati,
+						portrait: isHuati ? portrait : undefined,
+						rc_head_data: isHuati ? rc_head_data : undefined,
+						hotwordnum: parseInt(hotwordnum),
+						'update_time': new Date()
+					})
+					// console.log(hotword, hotwordnum, searched.data[0].hotwordnum, )
+					// console.log('update hotword：', hotword)
+				} else {
+					collection.where({
+						hotword
+					}).update({
+						isHuati,
+						portrait: isHuati ? portrait : undefined,
+						rc_head_data: isHuati ? rc_head_data : undefined,
+						// 指数没变大，不更新指数
+						'update_time': new Date()
+					})
+					// console.log('update2 hotword：', hotword)
+				}
 			}
 
 			// 查到不存在 插入数据
@@ -98,11 +114,11 @@ exports.main = async (event, context) => {
 					isHuati,
 					portrait: isHuati ? portrait : undefined,
 					rc_head_data: isHuati ? rc_head_data : undefined,
-					hotwordnum,
+					hotwordnum: parseInt(hotwordnum),
 					'create_time': new Date(),
 					'update_time': new Date()
 				}
-				console.log('hotword：', hotword)
+				// console.log('add hotword：', hotword)
 				// console.log("hotwordnum", parseInt(hotwordnum) + 1)
 				const addRes = await collection.add(hotItem)
 			}

@@ -16,13 +16,16 @@ exports.main = async (event, context) => {
 	count = count.total
 	let begin = page * pageSize
 
-	console.log('count:', count, 'begin:', begin)
 
 	let res
 	if (page * pageSize < count) {
-		res = await collection.orderBy("update_time", "asc").skip(begin).limit(pageSize).get()
+		// console.log('count:', count, 'begin:', begin)
+		res = await collection.orderBy('update_time', 'desc').skip(begin).limit(pageSize).get()
 	} else {
-		res = await collection.orderBy("update_time", "asc").skip(page * pageSize).get()
+		// console.log('到头啦')
+		res = {
+			"data": []
+		}
 	}
 
 	return res
