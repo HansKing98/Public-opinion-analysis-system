@@ -14,6 +14,7 @@ module.exports = {
 	url_Hotline: url_wrd + "getHotline",
 	url_Emotion: url_wrd + "getEmotionProportion",
 	url_EmotionSex: url_wrd + "getEmotionSex",
+	url_EmotionSex2: url_wrd + "getEmotionSex2",
 	url_EmotionTrends: url_wrd + "getContentTrends"
 
 

@@ -14,9 +14,19 @@
 		</view>
 
 		<u-cell-item icon="heart-fill" title="敏感占比" hover-class="cell-hover-class"></u-cell-item>
-		<view class="charts-box">
-			<qiun-data-charts type="MinGanPRing" :chartData="chartDataRing" :loadingType="3" background="none"
-				:animation="true" />
+		<div class="text-center margin-10"><span class="color_blue">
+				<u-icon name="heart-fill"></u-icon> 非敏感
+			</span> <span class="color_green">
+				<u-icon name="heart-fill"></u-icon> 中性
+			</span> <span class="color_yellow">
+				<u-icon name="heart-fill"></u-icon> 敏感
+			</span></div>
+		<view class="charts-box2">
+
+			<qiun-data-charts type="MinGanPRing" :chartData="emotion1" :loadingType="3" background="none"
+				:animation="true" :opts="{title:{name:'男'}}" />
+			<qiun-data-charts type="MinGanPRing" :chartData="emotion2" :loadingType="2" background="none"
+				:animation="true" :opts="{title:{name:'女'}}" />
 		</view>
 		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box">
@@ -37,7 +47,8 @@
 	} from './chartsData.js'
 	import {
 		makeWordCloud,
-		makeHotTrend
+		makeHotTrend,
+		emotionSex2
 	} from '@/utils/index.js'
 	export default {
 		data() {
@@ -46,7 +57,9 @@
 				chartDataWord: {},
 				chartDataRing: {},
 				chartHotTrend: {},
-				chartHotTrendOpts: {}
+				chartHotTrendOpts: {},
+				emotion1:{},
+				emotion2:{}
 			}
 		},
 		onLoad(option) {
@@ -70,6 +83,7 @@
 				this.chartDataWord = chartDataWord
 			}
 
+
 		},
 		methods: {
 			getServerData() {
@@ -81,7 +95,6 @@
 					this.chartDataRing = chartDataRing
 					// this.chartHotTrend = makeHotTrend(chartHotTrend)
 					// this.chartHotTrend = chartHotTrend
-					
 					// }, 1000)
 				})
 			},
@@ -89,6 +102,7 @@
 				uni.showLoading({
 					title: '正在加载更多...'
 				})
+				// 获取词云图
 				uniCloud.callFunction({
 					name: 'get-wrd-word-cloud',
 					data
@@ -109,7 +123,8 @@
 					})
 					console.error(err)
 				})
-
+				
+				// 获取 热度趋势
 				uniCloud.callFunction({
 					name: 'get-wrd-hot-line',
 					data
@@ -126,16 +141,21 @@
 							}
 						}
 					}
-					console.log("res.result", res.result)
-
-					uni.hideLoading()
+					// console.log("res.result", res.result)
 				}).catch((err) => {
-					uni.hideLoading()
 					this.chartDataWord = chartDataWord
-					uni.showModal({
-						content: `查询失败，错误信息为：${err.message}`,
-						showCancel: false
-					})
+					console.error(err)
+				})
+				
+				// 获取 分性别敏感占比
+				uniCloud.callFunction({
+					name: 'get-wrd-emotion-sex2',
+					data
+				}).then((res) => {
+					[this.emotion1,this.emotion2]=emotionSex2(res.result)
+					console.log("res.result", res.result)
+				}).catch((err) => {
+					this.chartDataWord = chartDataWord
 					console.error(err)
 				})
 			},
@@ -156,8 +176,43 @@
 		height: 300px;
 	}
 
+	.charts-box2 {
+		// 一行两个
+		display: flex;
+		width: 100%;
+		height: 200px;
+	}
+
 	/*每个页面公共css */
 	.cell-hover-class {
 		background-color: rgb(235, 237, 238);
+	}
+</style>
+
+
+<style lang="scss" scoped>
+	
+	.text-center {
+		text-align: center;
+		.color_blue {
+			color: #4FA5FF;
+			margin: 10px;
+		}
+
+		.color_green {
+			color: #91CB74;
+			margin: 10px;
+		}
+
+		.color_yellow {
+			color: #FAC858;
+			margin: 10px;
+		}
+
+		.icon-square {
+			width: 10rpx;
+			height: 10rpx;
+			background-color: red;
+		}
 	}
 </style>

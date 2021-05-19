@@ -135,7 +135,7 @@ module.exports = {
 		"dataPointShape": true,
 		"dataPointShapeType": "solid",
 		"legend": {
-			"show": true,
+			"show": false,
 			"position": "top",
 			"float": "right",
 			"padding": 5,
@@ -165,14 +165,15 @@ module.exports = {
 		},
 		"extra": {
 			"ring": {
-				"ringWidth": 60,
+				
+				"ringWidth": 20,
 				"activeOpacity": 0.5,
 				"activeRadius": 20,
 				"offsetAngle": 0,
-				"customRadius": 0,
-				"labelWidth": 10,
-				"border": true,
-				"borderWidth": 3,
+				"customRadius": 50,
+				"labelWidth": 1,
+				// "border": true,
+				// "borderWidth": 3,
 				"borderColor": "#FFFFFF",
 				"linearType": "custom"
 			},

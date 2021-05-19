@@ -43,6 +43,54 @@ export const makeHotTrend = (li) => {
 		"name": "热度",
 		"data": li.jsonLine,
 	}]
-	console.log('result',result)
+	console.log('result', result)
+	return result
+}
+
+// 分性别敏感占比
+export const emotionSex2 = (li) => {
+	console.log("li", li)
+	let male = {
+		"series": [{
+			"data": [{
+					"name": "非敏感",
+					"value": li.zm[0]
+				},
+				{
+					"name": "中性",
+					"value": li.zx[0]
+				},
+				{
+					"name": "敏感",
+					"value": li.fm[0]
+				}
+			]
+		}],
+	}
+	let famale = {
+		"series": [{
+			"data": [{
+					"name": "非敏感",
+					"value": li.zm[1]
+				},
+				{
+					"name": "中性",
+					"value": li.zx[1]
+				},
+				{
+					"name": "敏感",
+					"value": li.fm[1]
+				}
+			]
+		}],
+	}
+	let result = [male,famale]
+	// result.avgHot = li.avgHot
+	// result.categories = li.dates
+	// result.series = [{
+	// 	"name": "热度",
+	// 	"data": li.jsonLine,
+	// }]
+	// console.log('result',result)
 	return result
 }
