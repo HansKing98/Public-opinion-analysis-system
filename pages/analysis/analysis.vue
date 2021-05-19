@@ -20,7 +20,8 @@
 		</view>
 		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box">
-			<qiun-data-charts type="mix" :chartData="chartDataMix" background="none" :animation="true" />
+			<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
+				:opts="chartHotTrendOpts" />
 		</view>
 	</view>
 </template>
@@ -32,10 +33,11 @@
 	import {
 		chartDataWord,
 		chartDataRing,
-		chartDataMix
+		chartHotTrend
 	} from './chartsData.js'
 	import {
-		makeWordCloud
+		makeWordCloud,
+		makeHotTrend
 	} from '@/utils/index.js'
 	export default {
 		data() {
@@ -43,7 +45,8 @@
 				hotword: "",
 				chartDataWord: {},
 				chartDataRing: {},
-				chartDataMix: {}
+				chartHotTrend: {},
+				chartHotTrendOpts: {}
 			}
 		},
 		onLoad(option) {
@@ -59,9 +62,13 @@
 			// 静态数据
 			this.getServerData()
 			// 云数据库数据
-			this.get({
-				hotword: this.hotword
-			})
+			if (this.hotword) {
+				this.get({
+					hotword: this.hotword
+				})
+			} else {
+				this.chartDataWord = chartDataWord
+			}
 
 		},
 		methods: {
@@ -72,8 +79,17 @@
 					//开发者需要自行处理服务器返回的数据，应与标准数据格式一致，注意series的data数值应为数字格式
 					// this.chartDataWord = chartDataWord
 					this.chartDataRing = chartDataRing
-					this.chartDataMix = chartDataMix
-
+					this.chartHotTrend = makeHotTrend(chartHotTrend)
+					// this.chartHotTrend = chartHotTrend
+					this.chartHotTrendOpts = {
+						extra: {
+							markLine: {
+								data: [{
+									value: 82
+								}]
+							}
+						}
+					}
 					// }, 1000)
 				})
 			},
@@ -85,12 +101,12 @@
 					name: 'get-wrd-word-cloud',
 					data
 				}).then((res) => {
-					console.log(res.result)
+					// console.log(res.result)
 					// let li = eval(res.result.data[0].li)
 					// this.chartDataWord = makeWordCloud(li)
 					this.chartDataWord = res.result
-					
-					console.log("li", this.chartDataWord)
+
+					// console.log("li", this.chartDataWord)
 					uni.hideLoading()
 				}).catch((err) => {
 					uni.hideLoading()

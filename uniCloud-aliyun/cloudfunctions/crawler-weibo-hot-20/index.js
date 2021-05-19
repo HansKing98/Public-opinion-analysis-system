@@ -53,7 +53,12 @@ exports.main = async (event, context) => {
 			let data = {
 				"containerid": `231522type=60&q=#${hotword}#&t=0`,
 			}
-
+			
+			// await uniCloud.callFunction({
+			//     name: "get-wrd-word-cloud",
+			//     data: { hotword, "date": 24}
+			// })
+			
 			let detailRes = request('GET', url_getIndex, {
 				qs: data // 包含要附加到uri的querystring值的对象
 			})
@@ -102,7 +107,7 @@ exports.main = async (event, context) => {
 					// console.log('update2 hotword：', hotword)
 				}
 			}
-
+			
 			// 查到不存在 插入数据
 			let exist = await collection.where({
 				hotword
@@ -120,6 +125,8 @@ exports.main = async (event, context) => {
 				}
 				// console.log('add hotword：', hotword)
 				// console.log("hotwordnum", parseInt(hotwordnum) + 1)
+				
+				
 				const addRes = await collection.add(hotItem)
 			}
 		}
