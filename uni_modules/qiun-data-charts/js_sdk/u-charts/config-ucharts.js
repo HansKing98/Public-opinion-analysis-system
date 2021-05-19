@@ -544,7 +544,7 @@ module.exports = {
 		"enableMarkLine": true,
 		"dataLabel": false,
 		"xAxis": {
-			"labelCount": 4,
+			"": 4,
 			"itemCount": 40,
 			"disableGrid": true,
 			"gridColor": "#CCCCCC",
@@ -660,6 +660,7 @@ module.exports = {
 			"fontColor": "#666666",
 			"fontSize": 13,
 			"rotateLabel": false,
+			"labelCount":0.5,
 			"itemCount": 5,
 			"boundaryGap": "center",
 			"disableGrid": true,

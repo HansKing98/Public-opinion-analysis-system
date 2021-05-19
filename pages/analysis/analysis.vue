@@ -79,17 +79,9 @@
 					//开发者需要自行处理服务器返回的数据，应与标准数据格式一致，注意series的data数值应为数字格式
 					// this.chartDataWord = chartDataWord
 					this.chartDataRing = chartDataRing
-					this.chartHotTrend = makeHotTrend(chartHotTrend)
+					// this.chartHotTrend = makeHotTrend(chartHotTrend)
 					// this.chartHotTrend = chartHotTrend
-					this.chartHotTrendOpts = {
-						extra: {
-							markLine: {
-								data: [{
-									value: 82
-								}]
-							}
-						}
-					}
+					
 					// }, 1000)
 				})
 			},
@@ -107,6 +99,35 @@
 					this.chartDataWord = res.result
 
 					// console.log("li", this.chartDataWord)
+					uni.hideLoading()
+				}).catch((err) => {
+					uni.hideLoading()
+					this.chartDataWord = chartDataWord
+					uni.showModal({
+						content: `查询失败，错误信息为：${err.message}`,
+						showCancel: false
+					})
+					console.error(err)
+				})
+
+				uniCloud.callFunction({
+					name: 'get-wrd-hot-line',
+					data
+				}).then((res) => {
+
+					// this.chartDataWord = res.result
+					this.chartHotTrend = makeHotTrend(res.result)
+					this.chartHotTrendOpts = {
+						extra: {
+							markLine: {
+								data: [{
+									value: this.chartHotTrend.avgHot
+								}]
+							}
+						}
+					}
+					console.log("res.result", res.result)
+
 					uni.hideLoading()
 				}).catch((err) => {
 					uni.hideLoading()

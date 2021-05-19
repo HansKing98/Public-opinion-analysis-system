@@ -45,5 +45,6 @@ exports.main = async (event, context) => {
 	})
 
 	let resStr = res.getBody('utf8')
-	return JSON.parse(resStr)
+	let li = JSON.parse(resStr).data[0]
+	return li
 }

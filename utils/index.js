@@ -36,16 +36,13 @@ export const makeWordCloud = (li) => {
 // 简化日期
 export const makeHotTrend = (li) => {
 	console.log(li.categories)
-
-	let _categories = li.categories.map((el, index) => {
-		// 第一个保留日期 只显示四个时间
-		if (index % 7 !== 0) {
-			return ''
-		} else {
-			return el
-		}
-
-	})
-	li.categories = _categories
-	return li
+	let result = {}
+	result.avgHot = li.avgHot
+	result.categories = li.dates
+	result.series = [{
+		"name": "热度",
+		"data": li.jsonLine,
+	}]
+	console.log('result',result)
+	return result
 }
