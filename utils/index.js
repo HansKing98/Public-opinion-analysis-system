@@ -85,12 +85,6 @@ export const emotionSex2 = (li) => {
 		}],
 	}
 	let result = [male,famale]
-	// result.avgHot = li.avgHot
-	// result.categories = li.dates
-	// result.series = [{
-	// 	"name": "热度",
-	// 	"data": li.jsonLine,
-	// }]
-	// console.log('result',result)
+
 	return result
 }
