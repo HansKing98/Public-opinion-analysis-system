@@ -13,6 +13,12 @@
 			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none" />
 		</view>
 
+		<u-cell-item icon="heart-fill" title="情绪占比" hover-class="cell-hover-class"></u-cell-item>
+		<view class="charts-box-emotion">
+			<qiun-data-charts type="emotionProportion" :chartData="chartEmotionProportion" background="none"
+				:animation="true" />
+		</view>
+
 		<u-cell-item icon="heart-fill" title="敏感占比" hover-class="cell-hover-class"></u-cell-item>
 		<div class="text-center margin-10"><span class="color_blue">
 				<u-icon name="heart-fill"></u-icon> 非敏感
@@ -43,7 +49,8 @@
 	import {
 		chartDataWord,
 		chartDataRing,
-		chartHotTrend
+		chartHotTrend,
+		chartEmotionProportion
 	} from './chartsData.js'
 	import {
 		makeWordCloud,
@@ -58,8 +65,9 @@
 				chartDataRing: {},
 				chartHotTrend: {},
 				chartHotTrendOpts: {},
-				emotion1:{},
-				emotion2:{}
+				emotion1: {},
+				emotion2: {},
+				chartEmotionProportion: {}
 			}
 		},
 		onLoad(option) {
@@ -93,8 +101,7 @@
 					//开发者需要自行处理服务器返回的数据，应与标准数据格式一致，注意series的data数值应为数字格式
 					// this.chartDataWord = chartDataWord
 					this.chartDataRing = chartDataRing
-					// this.chartHotTrend = makeHotTrend(chartHotTrend)
-					// this.chartHotTrend = chartHotTrend
+
 					// }, 1000)
 				})
 			},
@@ -123,7 +130,7 @@
 					})
 					console.error(err)
 				})
-				
+
 				// 获取 热度趋势
 				uniCloud.callFunction({
 					name: 'get-wrd-hot-line',
@@ -146,14 +153,27 @@
 					this.chartDataWord = chartDataWord
 					console.error(err)
 				})
-				
+
 				// 获取 分性别敏感占比
 				uniCloud.callFunction({
 					name: 'get-wrd-emotion-sex2',
 					data
 				}).then((res) => {
-					[this.emotion1,this.emotion2]=emotionSex2(res.result)
-					console.log("res.result", res.result)
+					[this.emotion1, this.emotion2] = emotionSex2(res.result)
+					// console.log("res.result", res.result)
+				}).catch((err) => {
+					this.chartDataWord = chartDataWord
+					console.error(err)
+				})
+
+				// 获取 情绪占比
+				uniCloud.callFunction({
+					name: 'get-wrd-emotion',
+					data
+				}).then((res) => {
+					this.chartEmotionProportion = res.result
+					// console.log("res.result", res.result)
+
 				}).catch((err) => {
 					this.chartDataWord = chartDataWord
 					console.error(err)
@@ -176,6 +196,11 @@
 		height: 300px;
 	}
 
+	.charts-box-emotion {
+		width: 100%;
+		height: 200px;
+	}
+
 	.charts-box2 {
 		// 一行两个
 		display: flex;
@@ -191,9 +216,9 @@
 
 
 <style lang="scss" scoped>
-	
 	.text-center {
 		text-align: center;
+
 		.color_blue {
 			color: #4FA5FF;
 			margin: 10px;

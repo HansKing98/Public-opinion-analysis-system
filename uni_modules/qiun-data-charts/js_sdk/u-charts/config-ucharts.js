@@ -24,11 +24,11 @@ module.exports = {
 	"type": ["pie", "ring", "MinGanPRing", "rose", "word", "funnel", "map", "arcbar", "line", "column", "area",
 		"radar", "gauge",
 		"candle", "mix", "demotype",
-		"hotTrend"
+		"hotTrend", "emotionProportion"
 	],
 	"range": ["饼状图", "圆环图", "玫瑰图", "词云图", "漏斗图", "地图", "圆弧进度条", "折线图", "柱状图", "区域图", "雷达图", "仪表盘", "K线图", "混合图",
 		"自定义类型",
-		"热度趋势"
+		"热度趋势", "情绪占比"
 	],
 	//增加自定义图表类型，如果需要categories，请在这里加入您的图表类型例如最后的"demotype"
 	"categories": ["line", "column", "area", "radar", "gauge", "candle", "mix", "demotype", "MinGanPRing",
@@ -165,7 +165,7 @@ module.exports = {
 		},
 		"extra": {
 			"ring": {
-				
+
 				"ringWidth": 20,
 				"activeOpacity": 0.5,
 				"activeRadius": 20,
@@ -661,7 +661,7 @@ module.exports = {
 			"fontColor": "#666666",
 			"fontSize": 13,
 			"rotateLabel": false,
-			"labelCount":0.5,
+			"labelCount": 0.5,
 			"itemCount": 5,
 			"boundaryGap": "center",
 			"disableGrid": true,
@@ -740,6 +740,98 @@ module.exports = {
 					"labelBgOpacity": 0.8,
 					"yAxisIndex": 0
 				}]
+			}
+		}
+	},
+	"emotionProportion": {
+		"type": "rose",
+		"canvasId": "",
+		"canvas2d": false,
+		"background": "none",
+		"animation": true,
+		"timing": "easeOut",
+		"duration": 1000,
+		"color": [
+			"#b1bdd3", //中性
+			"#667eea", //恐惧
+			"#96e6a1", //惊奇
+			"#ff0844", //愤怒
+			"#005bea", //悲伤
+			"#fa8231" //喜悦
+		],
+		"padding": [
+			5,
+			5,
+			5,
+			5
+		],
+		"rotate": false,
+		"errorReload": true,
+		"fontSize": 13,
+		"fontColor": "#666666",
+		"enableScroll": false,
+		"touchMoveLimit": 60,
+		"enableMarkLine": false,
+		"dataLabel": true,
+		"dataPointShape": true,
+		"dataPointShapeType": "solid",
+		"legend": {
+			"show": true,
+			"position": "right",
+			"float": "center",
+			"padding": 5,
+			"margin": 5,
+			"backgroundColor": "rgba(0,0,0,0)",
+			"borderColor": "rgba(0,0,0,0)",
+			"borderWidth": 0,
+			"fontSize": 13,
+			"fontColor": "#666666",
+			"lineHeight": 25,
+			"hiddenColor": "#CECECE",
+			"itemGap": 10
+		},
+		"extra": {
+			"rose": {
+				"type": "area",
+				"minRadius": 50,
+				"activeOpacity": 0.5,
+				"activeRadius": 10,
+				"offsetAngle": 0,
+				"labelWidth": 15,
+				"border": true,
+				"borderWidth": 1,
+				"borderColor": "#FFFFFF",
+				"linearType": "custom",
+				"customColor": [
+					"#e3effc", //中性
+					"#764ba2", //恐惧
+					"#d4fc79", //惊奇
+					"#ffb199", //愤怒
+					"#00c6fb", //悲伤
+					"#f6d365" //喜悦
+				]
+			},
+			"tooltip": {
+				"showBox": true,
+				"showArrow": true,
+				"showCategory": false,
+				"borderWidth": 0,
+				"borderRadius": 0,
+				"borderColor": "#000000",
+				"borderOpacity": 0.7,
+				"bgColor": "#000000",
+				"bgOpacity": 0.7,
+				"gridType": "solid",
+				"dashLength": 4,
+				"gridColor": "#CCCCCC",
+				"fontColor": "#FFFFFF",
+				"splitLine": true,
+				"horizentalLine": false,
+				"xAxisLabel": false,
+				"yAxisLabel": false,
+				"labelBgColor": "#FFFFFF",
+				"labelBgOpacity": 0.7,
+				"labelFontColor": "#666666"
 			}
 		}
 	},

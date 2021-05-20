@@ -26,10 +26,6 @@ exports.main = async (event, context) => {
 	let data = {
 		"date": "24",
 		"searchKeyword1": hotword,
-		// "keyword1": "幼儿园不得设学前班",
-		// "filterKeyword1": "",
-		// "startTime": "2021-04-08 20:47:46",
-		// "endTime": "2021-04-09 20:47:46",
 		"sid": "0"
 	}
 

@@ -1,5 +1,5 @@
 export const makeWordCloud = (li) => {
-	console.log('name', li[0])
+	// console.log('name', li[0])
 	// li = li.slice(0, 10)
 	let res = li.map((el, index) => {
 		let {
@@ -35,7 +35,7 @@ export const makeWordCloud = (li) => {
 
 // 简化日期
 export const makeHotTrend = (li) => {
-	console.log(li.categories)
+	// console.log(li.categories)
 	let result = {}
 	result.avgHot = li.avgHot
 	result.categories = li.dates
@@ -43,13 +43,13 @@ export const makeHotTrend = (li) => {
 		"name": "热度",
 		"data": li.jsonLine,
 	}]
-	console.log('result', result)
+	// console.log('result', result)
 	return result
 }
 
 // 分性别敏感占比
 export const emotionSex2 = (li) => {
-	console.log("li", li)
+	// console.log("li", li)
 	let male = {
 		"series": [{
 			"data": [{
