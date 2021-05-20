@@ -38,10 +38,11 @@ export const makeHotTrend = (li) => {
 	// console.log(li.categories)
 	let result = {}
 	result.avgHot = li.avgHot
+	result.max = Math.max(...li.jsonLine)
 	result.categories = li.dates
 	result.series = [{
 		"name": "热度",
-		"data": li.jsonLine,
+		"data": li.jsonLine
 	}]
 	// console.log('result', result)
 	return result
@@ -84,7 +85,7 @@ export const emotionSex2 = (li) => {
 			]
 		}],
 	}
-	let result = [male,famale]
+	let result = [male, famale]
 
 	return result
 }

@@ -13,10 +13,21 @@
 			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none" />
 		</view>
 
+		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
+		<div class="text-center margin-10"><span class="color_blue">
+				<u-icon name="integral-fill"></u-icon> 最高{{TrendExtend.max}}
+			</span> <span class="color_green">
+				<u-icon name="more-dot-fill"></u-icon> 均值{{TrendExtend.avgHot}}
+			</span></div>
+		<view class="charts-box-trend">
+			<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
+				:opts="chartHotTrendOpts" />
+		</view>
+
 		<u-cell-item icon="heart-fill" title="情绪占比" hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box-emotion">
 			<qiun-data-charts type="emotionProportion" :chartData="chartEmotionProportion" background="none"
-				:animation="true" />
+				:animation="true" :errorMessage="errorMsgEmotion" />
 		</view>
 
 		<u-cell-item icon="heart-fill" title="敏感占比" hover-class="cell-hover-class"></u-cell-item>
@@ -34,11 +45,7 @@
 			<qiun-data-charts type="MinGanPRing" :chartData="emotion2" :loadingType="2" background="none"
 				:animation="true" :opts="{title:{name:'女'}}" />
 		</view>
-		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
-		<view class="charts-box">
-			<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
-				:opts="chartHotTrendOpts" />
-		</view>
+
 	</view>
 </template>
 
@@ -64,10 +71,12 @@
 				chartDataWord: {},
 				chartDataRing: {},
 				chartHotTrend: {},
+				TrendExtend: {},
 				chartHotTrendOpts: {},
 				emotion1: {},
 				emotion2: {},
-				chartEmotionProportion: {}
+				chartEmotionProportion: {},
+				errorMsgEmotion: null
 			}
 		},
 		onLoad(option) {
@@ -148,6 +157,10 @@
 							}
 						}
 					}
+					this.TrendExtend = {
+						avgHot: this.chartHotTrend.avgHot,
+						max: this.chartHotTrend.max
+					}
 					// console.log("res.result", res.result)
 				}).catch((err) => {
 					this.chartDataWord = chartDataWord
@@ -171,7 +184,11 @@
 					name: 'get-wrd-emotion',
 					data
 				}).then((res) => {
-					this.chartEmotionProportion = res.result
+					if (res.result.series[0].data[0]) {
+						this.chartEmotionProportion = res.result
+					} else {
+						this.errorMsgEmotion = '加载失败'
+					}
 					// console.log("res.result", res.result)
 
 				}).catch((err) => {
@@ -194,6 +211,11 @@
 	.charts-box {
 		width: 100%;
 		height: 300px;
+	}
+
+	.charts-box-trend {
+		width: 100%;
+		height: 160px;
 	}
 
 	.charts-box-emotion {

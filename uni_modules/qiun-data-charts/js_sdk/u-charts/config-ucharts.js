@@ -792,12 +792,12 @@ module.exports = {
 		},
 		"extra": {
 			"rose": {
-				"type": "area",
+				"type": "radius",
 				"minRadius": 50,
 				"activeOpacity": 0.5,
 				"activeRadius": 10,
 				"offsetAngle": 0,
-				"labelWidth": 15,
+				"labelWidth": 25,
 				"border": true,
 				"borderWidth": 1,
 				"borderColor": "#FFFFFF",
