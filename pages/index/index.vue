@@ -34,7 +34,8 @@
 			this.get()
 		},
 		onPullDownRefresh() {
-			Object.assign(this.$data.pageData, this.$options.data().pageData)
+			this.pageData.page = 0
+			// console.log(this.pageData.page)
 			this.get();
 		},
 		methods: {
@@ -47,9 +48,12 @@
 					name: 'get-weibo-hot',
 					data: this.pageData
 				}).then((res) => {
+					if (this.pageData.page == 0) {
+						this.list = []
+					}
 					this.list.push.apply(this.list, res.result.data);
 					// 是否读到最后一条
-					console.log(this.list.length)
+					// console.log(this.list.length)
 					if (res.result.data.length == 0) {
 						// 已经加载了全部数据
 						this.status = "nomore"
@@ -60,7 +64,7 @@
 					// 	content: `查询成功，获取数据列表为：${JSON.stringify(res.result.data)}`,
 					// 	showCancel: false
 					// })
-					console.log(res)
+					// console.log(res)
 				}).catch((err) => {
 					uni.hideLoading()
 					uni.showModal({
