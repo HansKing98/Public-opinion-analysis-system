@@ -6,7 +6,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "舆情热点",
+				// "navigationBarTitleText": "舆情热点",
+				"navigationStyle":"custom",
 				"enablePullDownRefresh": true
 			}
 		}, {

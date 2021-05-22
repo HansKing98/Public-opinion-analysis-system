@@ -83,10 +83,15 @@
 				uni.navigateTo({
 					url: url + hotword
 				});
-			}
+			},
+			scrollHandle(e){
+			      let top = e.srcElement.scrollingElement.scrollTop;    // 获取页面滚动高度
+			      console.log(top);
+			        }
 		},
 		mounted() {
 			this.sycnList = this.list;
+			window.addEventListener('scroll',this.scrollHandle);//绑定页面滚动事件
 		}
 	}
 </script>
