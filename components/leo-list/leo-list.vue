@@ -1,5 +1,5 @@
 <template>
-	<view class="leo-list">
+	<view class="leo-list" @scroll="scrollEvent">
 		<template v-if="sycnList">
 			<view class="uni-flex uni-row leo-align-items-center leo-space-between leo-list-item"
 				v-for="(item, index) in list" :key="index" @click="check(item.hotword)">
@@ -70,7 +70,9 @@
 
 		methods: {
 			check(hotword) {
-				let params = {hotword}
+				let params = {
+					hotword
+				}
 				let url = '../../pages/analysis/analysis?hotword='
 				this.pageTo(url, params)
 				// console.log("跳转到钻取页面", hotword);
@@ -83,15 +85,10 @@
 				uni.navigateTo({
 					url: url + hotword
 				});
-			},
-			scrollHandle(e){
-			      let top = e.srcElement.scrollingElement.scrollTop;    // 获取页面滚动高度
-			      console.log(top);
-			        }
+			}
 		},
 		mounted() {
 			this.sycnList = this.list;
-			window.addEventListener('scroll',this.scrollHandle);//绑定页面滚动事件
 		}
 	}
 </script>
