@@ -11,7 +11,6 @@
 			<div slot="content">
 				<!-- main-content -->
 				<div>
-					abc
 					<hot ref="hot"></hot>
 				</div>
 			</div>

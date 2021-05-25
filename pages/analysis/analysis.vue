@@ -10,7 +10,8 @@
 		-->
 		<u-cell-item icon="heart-fill" title="舆情词云图" arrow hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box">
-			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none" />
+			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none"
+				:errorMessage="errorMsgwordCloud" />
 		</view>
 
 		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
@@ -21,7 +22,7 @@
 			</span></div>
 		<view class="charts-box-trend">
 			<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
-				:opts="chartHotTrendOpts" />
+				:opts="chartHotTrendOpts" :errorMessage="errorMsgHotTrend" />
 		</view>
 
 		<u-cell-item icon="heart-fill" title="情绪占比" hover-class="cell-hover-class"></u-cell-item>
@@ -76,7 +77,9 @@
 				emotion1: {},
 				emotion2: {},
 				chartEmotionProportion: {},
-				errorMsgEmotion: null
+				errorMsgEmotion: null,
+				errorMsgwordCloud: null,
+				errorMsgHotTrend: null
 			}
 		},
 		onLoad(option) {
@@ -97,7 +100,7 @@
 					hotword: this.hotword
 				})
 			} else {
-				this.chartDataWord = chartDataWord
+				this.chartDataWord = {}
 			}
 
 
@@ -123,20 +126,25 @@
 					name: 'get-wrd-word-cloud',
 					data
 				}).then((res) => {
-					// console.log(res.result)
+					console.log(123)
+					console.log(res.result)
 					// let li = eval(res.result.data[0].li)
 					// this.chartDataWord = makeWordCloud(li)
-					this.chartDataWord = res.result
-
+					// this.chartDataWord = res.result
+					if (res.result.series[0]) {
+						this.chartDataWord = res.result
+					} else {
+						this.errorMsgwordCloud = '数据为空'
+					}
 					// console.log("li", this.chartDataWord)
 					uni.hideLoading()
 				}).catch((err) => {
-					uni.hideLoading()
-					this.chartDataWord = chartDataWord
-					uni.showModal({
-						content: `查询失败，错误信息为：${err.message}`,
-						showCancel: false
-					})
+
+					this.errorMsgwordCloud = "请求超时，点击以重新加载"
+					// uni.showModal({
+					// 	content: `查询失败，错误信息为：${err.message}`,
+					// 	showCancel: false
+					// })
 					console.error(err)
 				})
 
@@ -147,23 +155,29 @@
 				}).then((res) => {
 
 					// this.chartDataWord = res.result
-					this.chartHotTrend = makeHotTrend(res.result)
-					this.chartHotTrendOpts = {
-						extra: {
-							markLine: {
-								data: [{
-									value: this.chartHotTrend.avgHot
-								}]
+					// console.log("data2",res.result.numberCustom)
+					if (res.result.numberCustom) {
+						this.chartHotTrend = makeHotTrend(res.result)
+						this.chartHotTrendOpts = {
+							extra: {
+								markLine: {
+									data: [{
+										value: this.chartHotTrend.avgHot
+									}]
+								}
 							}
 						}
+					} else {
+						this.errorMsgHotTrend = '数据缺失'
 					}
+
 					this.TrendExtend = {
 						avgHot: this.chartHotTrend.avgHot,
 						max: this.chartHotTrend.max
 					}
 					// console.log("res.result", res.result)
 				}).catch((err) => {
-					this.chartDataWord = chartDataWord
+					this.errorMsgHotTrend = '请求超时，点击以重新加载'
 					console.error(err)
 				})
 
@@ -175,7 +189,6 @@
 					[this.emotion1, this.emotion2] = emotionSex2(res.result)
 					// console.log("res.result", res.result)
 				}).catch((err) => {
-					this.chartDataWord = chartDataWord
 					console.error(err)
 				})
 
@@ -187,12 +200,12 @@
 					if (res.result.series[0].data[0]) {
 						this.chartEmotionProportion = res.result
 					} else {
-						this.errorMsgEmotion = '加载失败'
+						this.errorMsgEmotion = '数据为空'
 					}
 					// console.log("res.result", res.result)
 
 				}).catch((err) => {
-					this.chartDataWord = chartDataWord
+					this.errorMsgEmotion = '请求超时，点击以重新加载'
 					console.error(err)
 				})
 			},
