@@ -6,7 +6,7 @@
 
 			<div class="drawer-content" slot="drawer">
 				<!-- drawer-content -->
-				123
+				<my />
 			</div>
 			<div slot="content">
 				<!-- main-content -->
@@ -20,9 +20,11 @@
 
 <script>
 	import hot from './hot.vue'
+	import my from '../my/my.vue'
 	export default {
 		components: {
-			hot
+			hot,
+			my
 		},
 		onReachBottom() {
 			console.log(12)
