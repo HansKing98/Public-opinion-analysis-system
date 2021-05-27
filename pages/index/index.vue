@@ -1,9 +1,8 @@
 <template>
-	<view class="content">
+	<view class="content" @touchstart="start" @touchend="end">
 		<view @click="showDrawer" class="navbar-index drawer" :class="drawer?'drawer-open':''">
-			<u-avatar
-				src="https://image.hansking.cn/uPic/202105/QabSKj.png"
-				size="100" mode="square" class="u-avatar btn"></u-avatar>
+			<u-avatar src="https://image.hansking.cn/uPic/202105/QabSKj.png" size="100" mode="square"
+				class="u-avatar btn"></u-avatar>
 			<view class="user-name">hAns King</view>
 		</view>
 
@@ -43,7 +42,8 @@
 					showTitle: true,
 					animate: true
 				},
-				drawer: false
+				drawer: false,
+				startData: {}
 			}
 		},
 		mounted() {
@@ -56,6 +56,29 @@
 			this.get();
 		},
 		methods: {
+			start(e) {
+				// console.log(e)
+				this.startData.clientX = e.changedTouches[0].clientX;
+				this.startData.clientY = e.changedTouches[0].clientY;
+			},
+			end(e) {
+				// console.log(e)
+				const subX = e.changedTouches[0].clientX - this.startData.clientX;
+				const subY = e.changedTouches[0].clientY - this.startData.clientY;
+				if (subY > 50 || subY < -50) {
+					console.log('上下滑')
+				} else {
+					if (subX > 100) {
+						console.log('右滑')
+						this.showDrawer()
+					} else if (subX < -100) {
+						console.log('左滑')
+						this.closeDrawer()
+					} else {
+						console.log('无效')
+					}
+				}
+			},
 			changeDrawer(e) {
 				// console.log(e)
 				if (e === false) {
@@ -126,12 +149,15 @@
 	page {
 		background: #f5f7fa;
 	}
-	.btn{
+
+	.btn {
 		opacity: 1;
-		&:active{
+
+		&:active {
 			opacity: 0.5;
 		}
 	}
+
 	.back-to-index {
 		position: absolute;
 		font-size: 50px;
@@ -144,7 +170,8 @@
 		border-radius: 50%;
 		display: flxx;
 		justify-content: center;
-		&:active{
+
+		&:active {
 			color: #666;
 			background-color: #fff;
 		}
@@ -193,7 +220,7 @@
 	}
 
 	.drawer {
-		transition: all 0.2s ease;
+		transition: all 0.3s ease;
 	}
 
 	.drawer-close {

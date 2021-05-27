@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" @touchstart="start" @touchend="end">
 		<!--
 		极简调用示例，只需指定type及chartData即可。
 		图表默认配置请修改js_sdk/u-charts/config-ucharts.js对应图表类型下配置 
@@ -79,7 +79,8 @@
 				chartEmotionProportion: {},
 				errorMsgEmotion: null,
 				errorMsgwordCloud: null,
-				errorMsgHotTrend: null
+				errorMsgHotTrend: null,
+				startData: {}
 			}
 		},
 		onLoad(option) {
@@ -106,6 +107,28 @@
 
 		},
 		methods: {
+			start(e) {
+				// console.log(e)
+				this.startData.clientX = e.changedTouches[0].clientX;
+				this.startData.clientY = e.changedTouches[0].clientY;
+			},
+			end(e) {
+				// console.log(e)
+				const subX = e.changedTouches[0].clientX - this.startData.clientX;
+				const subY = e.changedTouches[0].clientY - this.startData.clientY;
+				if (subY > 50 || subY < -50) {
+					// console.log('上下滑')
+				} else {
+					if (subX > 100) {
+						// console.log('右滑')
+						uni.navigateBack()
+					} else if (subX < -100) {
+						// console.log('左滑')
+					} else {
+						// console.log('无效')
+					}
+				}
+			},
 			getServerData() {
 				// console.log("2", chartDataWord)
 				setTimeout(() => {
@@ -254,9 +277,10 @@
 
 
 <style lang="scss" scoped>
-	.u-cell{
+	.u-cell {
 		padding-left: 70rpx;
 	}
+
 	.text-center {
 		text-align: center;
 
