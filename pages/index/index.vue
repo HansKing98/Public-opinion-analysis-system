@@ -1,8 +1,8 @@
 <template>
 	<view class="content" @touchstart="start" @touchend="end">
-		<view @click="showDrawer" class="navbar-index drawer" :class="drawer?'drawer-open':''">
+		<view @click="showDrawer" class="navbar-index drawer ripple" :class="drawer?'drawer-open':''">
 			<u-avatar src="https://image.hansking.cn/uPic/202105/QabSKj.png" size="100" mode="square"
-				class="u-avatar btn"></u-avatar>
+				class="u-avatar"></u-avatar>
 			<view class="user-name">hAns King</view>
 		</view>
 
@@ -155,14 +155,6 @@
 		background: #f5f7fa;
 	}
 
-	.btn {
-		opacity: 1;
-
-		&:active {
-			opacity: 0.5;
-		}
-	}
-
 	.back-to-index {
 		position: absolute;
 		font-size: 50px;
@@ -190,14 +182,14 @@
 		display: flex;
 		align-items: center;
 		background-image: linear-gradient(45deg, #4facfe, #00f2fe);
-		padding-top: 50rpx;
-
+		&:active{
+			.u-avatar {
+				transform: scale(1.4);
+			}
+		}
 		.u-avatar {
 			padding: 20rpx;
-			position: -webkit-sticky;
-			/* Safari */
-			position: sticky;
-			top: 10px;
+			transition: all 0.1s ease;
 		}
 
 		.user-name {

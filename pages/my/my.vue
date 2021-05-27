@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="personal btn">
+		<view class="personal ripple">
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
 				<view class="personal-info">
@@ -10,7 +10,7 @@
 			</view>
 			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
 		</view>
-		<view class="n-p btn" v-for="(item,index) in list" :key="index" hover-class="hover-class"
+		<view class="n-p ripple" v-for="(item,index) in list" :key="index" hover-class="hover-class"
 			@click="onClick(item)">
 			<view style="position: relative">
 				<view class="p-left">
@@ -77,13 +77,6 @@
 </script>
 
 <style lang="scss" scoped>
-	.btn {
-		opacity: 1;
-
-		&:active {
-			opacity: 0.5;
-		}
-	}
 
 	page {
 		background-color: #f7f7f7;

@@ -3,19 +3,20 @@
 		<template v-if="sycnList">
 			<view class="uni-flex uni-row leo-align-items-center leo-space-between leo-list-item"
 				v-for="(item, index) in list" :key="index" @click="check(item.hotword)">
-				<view class="uni-flex uni-row leo-align-items-center">
+				<view class="news-list-contanier ripple uni-flex uni-row leo-align-items-center">
 					<view class="leo-align-items-center" v-if="item.isHuati" style="padding-right: 30rpx;">
 						<image class="icon" :style="{'border-radius': + borderRadius + 'rpx'}" :src="item.portrait"
 							mode="">
 						</image>
 					</view>
-					<view class="">
+					<view class="b-container">
 						<view class="text-line-height-1 text-16 pingfangbold leo-ellipsis-1">
 							{{ item.hotword || "暂无数据"}}
 						</view>
-						<view class="text-line-height-1 pingfangmedium text-12 leo-ellipsis-1"
+						<view class="read-time text-line-height-1 text-12 leo-ellipsis-1"
 							style="margin-top: 16rpx; color: rgba(156,164,169,1);">
-							{{ item.rc_head_data || "暂无数据"}}
+							<view class="">{{ item.rc_head_data.slice(0,-3) || "暂无数据"}}</view>
+							<view class="time">{{item.create_time | timefliter}}</view>
 						</view>
 					</view>
 				</view>
@@ -102,6 +103,24 @@
 
 			&:first-child {
 				border-top: #e4e7ed 0rpx solid;
+			}
+
+			.news-list-contanier {
+				display: flex;
+				width: 100%;
+				.b-container {
+					display: flex;
+					flex-direction: column;
+					flex: 1;
+					justify-content: space-between;
+					.read-time{
+						display: flex;
+						justify-content: space-between;
+						.time{
+							margin-right: 12px;
+						}
+					}
+				}
 			}
 
 			.icon {
