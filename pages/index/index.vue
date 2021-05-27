@@ -1,17 +1,27 @@
 <template>
 	<view class="content">
-		<view class="card-bg">
+		<button @click="showDrawer" type="primary">右侧弹出 显示Drawer</button>
+		<view class="card-bg drawer" :class="drawer?'drawer-open':''">
 			<leo-list :show-icon="true" :show-arrow="true" :list="list"></leo-list>
 			<skeleton :loading="loading" :avatarSize="skeleton1.avatarSize" :avatarShape="'square'" :row="skeleton1.row"
 				:showTitle="skeleton1.showTitle" :animate="skeleton1.animate" v-for="(i,index) in 8" :key="index">
 			</skeleton>
 			<u-loadmore :status="status" @loadmore="getMore()" />
 		</view>
+		<uni-drawer ref="DrawerLeft" mode="left" width="400" @change="(e)=>changeDrawer(e)">
+			<scroll-view scroll-y="true">
+				<my />
+			</scroll-view>
+		</uni-drawer>
 	</view>
 </template>
 
 <script>
+	import my from '../my/my.vue'
 	export default {
+		components: {
+			my
+		},
 		data() {
 			return {
 				title: 'Hello',
@@ -27,11 +37,13 @@
 					row: 1,
 					showTitle: true,
 					animate: true
-				}
+				},
+				drawer: false
 			}
 		},
 		mounted() {
 			this.get()
+			this.$refs.DrawerLeft.open()
 		},
 		onPullDownRefresh() {
 			this.pageData.page = 0
@@ -39,6 +51,22 @@
 			this.get();
 		},
 		methods: {
+			changeDrawer(e) {
+				// console.log(e)
+				if (e === false) {
+					this.drawer = false
+				}else{
+					this.drawer = true
+				}
+			},
+			showDrawer() {
+				this.drawer = true
+				this.$refs.DrawerLeft.open();
+			},
+			closeDrawer() {
+				this.drawer = false
+				this.$refs.DrawerLeft.close();
+			},
 			get() {
 				uni.showLoading({
 					title: '正在加载更多...'
@@ -114,5 +142,20 @@
 		background: #ffffff;
 		border-radius: 20rpx;
 		box-shadow: 0px 4rpx 20rpx 0rpx rgba(235, 241, 244, 0.35);
+	}
+
+	.drawer {
+		transition: all 0.2s ease-in-out;
+	}
+
+	.drawer-close {
+		// transform: translateX(200px);
+	}
+
+	.drawer-open {
+		// position: absolute;
+		// left:100px ;
+		transform: translateX(400px);
+		// animation: ;
 	}
 </style>

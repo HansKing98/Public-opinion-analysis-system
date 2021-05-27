@@ -4,8 +4,8 @@
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
 				<view class="personal-info">
-					<view class="">name</view>
-					<view class="">id:12333333333</view>
+					<view class="">hAns King</view>
+					<view class="">id:10001</view>
 				</view>
 			</view>
 			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
