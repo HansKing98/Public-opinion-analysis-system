@@ -1,5 +1,5 @@
 <template>
-	<view class="leo-list" @scroll="scrollEvent">
+	<view class="leo-list">
 		<template v-if="sycnList">
 			<view class="uni-flex uni-row leo-align-items-center leo-space-between leo-list-item"
 				v-for="(item, index) in list" :key="index" @click="check(item.hotword)">

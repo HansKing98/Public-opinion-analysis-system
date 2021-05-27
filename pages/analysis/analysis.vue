@@ -8,13 +8,13 @@
 		配置参数请用在线生成工具(http://demo.ucharts.cn/)生成
 		3、class="charts-box"这个样式，指定了高度，如果你的父元素有固定高度，请修改为height:100%
 		-->
-		<u-cell-item icon="heart-fill" title="舆情词云图" arrow hover-class="cell-hover-class"></u-cell-item>
+		<u-cell-item icon="heart-fill" title="舆情词云图" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box">
 			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none"
 				:errorMessage="errorMsgwordCloud" />
 		</view>
 
-		<u-cell-item icon="heart-fill" title="热度走势" hover-class="cell-hover-class"></u-cell-item>
+		<u-cell-item icon="heart-fill" title="热度走势" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
 		<div class="text-center margin-10"><span class="color_blue">
 				<u-icon name="integral-fill"></u-icon> 最高{{TrendExtend.max}}
 			</span> <span class="color_green">
@@ -25,13 +25,13 @@
 				:opts="chartHotTrendOpts" :errorMessage="errorMsgHotTrend" />
 		</view>
 
-		<u-cell-item icon="heart-fill" title="情绪占比" hover-class="cell-hover-class"></u-cell-item>
+		<u-cell-item icon="heart-fill" title="情绪占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
 		<view class="charts-box-emotion">
 			<qiun-data-charts type="emotionProportion" :chartData="chartEmotionProportion" background="none"
 				:animation="true" :errorMessage="errorMsgEmotion" />
 		</view>
 
-		<u-cell-item icon="heart-fill" title="敏感占比" hover-class="cell-hover-class"></u-cell-item>
+		<u-cell-item icon="heart-fill" title="敏感占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
 		<div class="text-center margin-10"><span class="color_blue">
 				<u-icon name="heart-fill"></u-icon> 非敏感
 			</span> <span class="color_green">
@@ -126,8 +126,8 @@
 					name: 'get-wrd-word-cloud',
 					data
 				}).then((res) => {
-					console.log(123)
-					console.log(res.result)
+					// console.log(123)
+					// console.log(res.result)
 					// let li = eval(res.result.data[0].li)
 					// this.chartDataWord = makeWordCloud(li)
 					// this.chartDataWord = res.result
@@ -216,6 +216,9 @@
 
 <style>
 	.content {
+		/* #ifdef APP-PLUS */
+		padding-top: var(--status-bar-height);
+		/* #endif */
 		display: flex;
 		flex-direction: column;
 		flex: 1;
@@ -251,6 +254,9 @@
 
 
 <style lang="scss" scoped>
+	.u-cell{
+		padding-left: 70rpx;
+	}
 	.text-center {
 		text-align: center;
 

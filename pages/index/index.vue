@@ -1,17 +1,22 @@
 <template>
 	<view class="content">
-		<button @click="showDrawer" type="primary">右侧弹出 显示Drawer</button>
+		<view @click="showDrawer" class="navbar-index drawer" :class="drawer?'drawer-open':''">
+			<u-avatar
+				src="https://image.hansking.cn/uPic/202105/QabSKj.png"
+				size="100" mode="square" class="u-avatar btn"></u-avatar>
+			<view class="user-name">hAns King</view>
+		</view>
+
 		<view class="card-bg drawer" :class="drawer?'drawer-open':''">
 			<leo-list :show-icon="true" :show-arrow="true" :list="list"></leo-list>
 			<skeleton :loading="loading" :avatarSize="skeleton1.avatarSize" :avatarShape="'square'" :row="skeleton1.row"
-				:showTitle="skeleton1.showTitle" :animate="skeleton1.animate" v-for="(i,index) in 8" :key="index">
+				:showTitle="skeleton1.showTitle" :animate="skeleton1.animate" v-for="(i,index) in 11" :key="index">
 			</skeleton>
 			<u-loadmore :status="status" @loadmore="getMore()" />
 		</view>
-		<uni-drawer ref="DrawerLeft" mode="left" width="400" @change="(e)=>changeDrawer(e)">
-			<scroll-view scroll-y="true">
-				<my />
-			</scroll-view>
+		<uni-drawer ref="DrawerLeft" mode="left" :width="400" @change="(e)=>changeDrawer(e)">
+			<my />
+			<u-icon name="arrow-leftward" size="50" class="back-to-index" @click="closeDrawer"></u-icon>
 		</uni-drawer>
 	</view>
 </template>
@@ -43,7 +48,7 @@
 		},
 		mounted() {
 			this.get()
-			this.$refs.DrawerLeft.open()
+			// this.$refs.DrawerLeft.open()
 		},
 		onPullDownRefresh() {
 			this.pageData.page = 0
@@ -55,7 +60,7 @@
 				// console.log(e)
 				if (e === false) {
 					this.drawer = false
-				}else{
+				} else {
 					this.drawer = true
 				}
 			},
@@ -121,13 +126,56 @@
 	page {
 		background: #f5f7fa;
 	}
+	.btn{
+		opacity: 1;
+		&:active{
+			opacity: 0.5;
+		}
+	}
+	.back-to-index {
+		position: absolute;
+		font-size: 50px;
+		right: 30px;
+		bottom: 30px;
+		width: 50px;
+		height: 50px;
+		color: #333;
+		background-color: #eee;
+		border-radius: 50%;
+		display: flxx;
+		justify-content: center;
+		&:active{
+			color: #666;
+			background-color: #fff;
+		}
 
-	.content {
+	}
+
+	.navbar-index {
 		/* #ifdef APP-PLUS */
 		padding-top: var(--status-bar-height);
 		/* #endif */
+		display: flex;
+		align-items: center;
+		background-image: linear-gradient(45deg, #4facfe, #00f2fe);
+		padding-top: 50rpx;
+
+		.u-avatar {
+			padding: 20rpx;
+			position: -webkit-sticky;
+			/* Safari */
+			position: sticky;
+			top: 10px;
+		}
+
+		.user-name {
+			color: white;
+		}
+	}
+
+	.content {
 		/* #ifndef APP-PLUS */
-		padding-top: 1rpx;
+		// padding-top: 1rpx;
 		/* #endif */
 		padding-bottom: 1rpx;
 		// min-height: calc(100vh - var(--status-bar-height));
@@ -145,7 +193,7 @@
 	}
 
 	.drawer {
-		transition: all 0.2s ease-in-out;
+		transition: all 0.2s ease;
 	}
 
 	.drawer-close {

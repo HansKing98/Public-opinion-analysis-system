@@ -1,19 +1,20 @@
 <template>
 	<view>
-		<view class="personal">
+		<view class="personal btn">
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
 				<view class="personal-info">
 					<view class="">hAns King</view>
-					<view class="">id:10001</view>
+					<view class="">10001</view>
 				</view>
 			</view>
 			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
 		</view>
-		<view class="n-p" v-for="(item,index) in list" :key="index" hover-class="hover-class" @click="onClick(item)">
+		<view class="n-p btn" v-for="(item,index) in list" :key="index" hover-class="hover-class"
+			@click="onClick(item)">
 			<view style="position: relative">
 				<view class="p-left">
-					<u-icon :name="item.icon" size="45" color="#757575"></u-icon>
+					<u-icon :name="item.icon" size="45" color="#949696"></u-icon>
 				</view>
 			</view>
 			<view class="p-right">
@@ -35,32 +36,37 @@
 	export default {
 		data() {
 			return {
-				avatar: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1730713693,2130926401&fm=26&gp=0.jpg',
+				avatar: 'https://image.hansking.cn/uPic/202105/QabSKj.png',
 				list: [{
+					name: '消息',
+					id: 'xiaoxi',
+					icon: 'bell-fill',
+					iconBackground: '#398c0c',
+				}, {
 					name: '收藏',
 					id: 'favorites',
 					icon: 'star-fill',
 					iconBackground: '#398c0c',
 				}, {
-					name: '相册',
+					name: '评论',
 					id: 'photoAlbum',
-					icon: 'photo-fill',
+					icon: 'more-circle-fill',
 					iconBackground: '#5e2d88',
 				}, {
-					name: '卡包',
+					name: '点赞',
 					id: 'cardPackage',
-					icon: 'grid-fill',
+					icon: 'thumb-up-fill',
 					iconBackground: '#33696c',
-				}, {
-					name: '表情',
-					id: 'expression',
-					icon: 'gift-fill',
-					iconBackground: '#833456',
 				}, {
 					name: '设置',
 					id: 'setUp',
 					icon: 'setting-fill',
 					iconBackground: '#3b2021',
+				}, {
+					name: '注销登录',
+					id: 'logout',
+					icon: 'zhuanfa',
+					iconBackground: '#833456',
 				}],
 			}
 		},
@@ -70,12 +76,25 @@
 	}
 </script>
 
-<style>
-	
+<style lang="scss" scoped>
+	.btn {
+		opacity: 1;
+
+		&:active {
+			opacity: 0.5;
+		}
+	}
+
 	page {
 		background-color: #f7f7f7;
+		max-width: 100vw;
 	}
+
 	.personal {
+		max-width: 100vw;
+		/* #ifdef APP-PLUS */
+		margin-top: var(--status-bar-height);
+		/* #endif */
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -109,6 +128,7 @@
 	}
 
 	.n-p {
+		max-width: 100vw;
 		display: flex;
 		align-items: center;
 		background-color: #ffffff;
@@ -128,12 +148,12 @@
 		padding: 10rpx;
 		margin: 20rpx;
 		color: #FFFFFF;
-		border-radius: 10rpx;
+		border-radius: 20rpx;
 
 	}
 
 	.p-right {
-		height:90rpx;
+		height: 90rpx;
 		flex: 1;
 		display: flex;
 		align-items: center;
