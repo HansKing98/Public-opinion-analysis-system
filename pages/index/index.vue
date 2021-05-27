@@ -17,6 +17,7 @@
 			<my />
 			<u-icon name="arrow-leftward" size="50" class="back-to-index" @click="closeDrawer"></u-icon>
 		</uni-drawer>
+		<u-back-top :scroll-top="scrollTop" bottom="120"></u-back-top>
 	</view>
 </template>
 
@@ -43,7 +44,8 @@
 					animate: true
 				},
 				drawer: false,
-				startData: {}
+				startData: {},
+				scrollTop: 0
 			}
 		},
 		mounted() {
@@ -54,6 +56,9 @@
 			this.pageData.page = 0
 			// console.log(this.pageData.page)
 			this.get();
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
 		},
 		methods: {
 			start(e) {
