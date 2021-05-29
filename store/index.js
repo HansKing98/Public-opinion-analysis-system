@@ -27,6 +27,10 @@ const store = new Vuex.Store({
 		// 模拟本地登录， 不可用
 		setUserInfo(state, userInfo) {
 			state.userInfo = userInfo
+			if (!userInfo.username) {
+				// 用户名不存在则为手机登录
+				// state.userInfo.username = state.userInfo._id.slice(4, 11)
+			}
 			// 获取用户信息 同时将 hasLogin 设为 true
 			state.hasLogin = true
 		},

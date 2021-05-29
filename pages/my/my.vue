@@ -4,8 +4,8 @@
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
 				<view class="personal-info" v-if="hasLogin">
-					<view class="">{{userInfo.username}}</view>
-					<view class="">{{userInfo._id}}</view>
+					<view class="">{{userInfo.username || userInfo.mobile}}</view>
+					<view class="">{{userInfo._id.slice(14)}}</view>
 				</view>
 				<view class="personal-info" v-else>
 					<view class="">点击头像登录</view>
@@ -83,7 +83,19 @@
 			...mapMutations(['setLogout']), // 注销登录
 			onClick(item) {
 				console.log('choose-', item.name)
-				if (item.type === 'logout') this.handleLogout()
+				if (item.type === 'logout') {
+					this.handleLogout()
+					uni.showToast({
+						icon: 'none',
+						position: "top",
+						title: '已注销登录',
+					});
+					uni.reLaunch({
+						url: '/pages/index/index'
+					});
+					return
+				}
+				console.log(123)
 			},
 			handleLogout() {
 				this.setLogout()
