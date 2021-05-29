@@ -41,12 +41,12 @@
 		},
 		methods: {
 			...mapMutations(['login']),
-			toMain(userName) {
+			toMain(username) {
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
-				console.log('toMain:', userName)
+				console.log('toMain:', username)
 				uni.reLaunch({
 					url: '../my/my',
 				});

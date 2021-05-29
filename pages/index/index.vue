@@ -3,7 +3,7 @@
 		<view @click="showDrawer" class="navbar-index drawer ripple" :class="drawer?'drawer-open':''">
 			<u-avatar :src="avatar" size="100" mode="square" class="u-avatar">
 			</u-avatar>
-			<view class="user-name">hAns King</view>
+			<view class="user-name" v-if="hasLogin">{{userInfo.username}}</view>
 		</view>
 
 		<view class="card-bg drawer" :class="drawer?'drawer-open':''">
@@ -22,11 +22,16 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	import my from '../my/my.vue'
 	export default {
 		components: {
 			my
 		},
+		computed: mapState(['hasLogin', 'userInfo']),
 		data() {
 			return {
 				title: 'Hello',
@@ -60,6 +65,7 @@
 		onShow() {
 			console.log('show Index')
 			// 如登录后重新获取用户数据
+			this.getUserInfo()
 		},
 		onHide() {
 			console.log('hide Index')
@@ -79,6 +85,7 @@
 			this.scrollTop = e.scrollTop;
 		},
 		methods: {
+			...mapMutations(['setUserInfo']), // 验证登录 和 注销登录方法
 			start(e) {
 				// console.log(e)
 				this.startData.clientX = e.changedTouches[0].clientX;
@@ -154,6 +161,24 @@
 					console.error(err)
 				}).finally(() => {
 					uni.stopPullDownRefresh()
+				})
+			},
+			getUserInfo() {
+				// 通过比对 token 检查用户登录信息
+				let that = this
+				uniCloud.callFunction({
+					name: 'user-center',
+					data: {
+						action: 'getUserInfo',
+					},
+					success(res) {
+						console.log("getUserInfo", res.result)
+						if (res.result.code == 0) {
+							that.setUserInfo({
+								...res.result.userInfo
+							})
+						}
+					}
 				})
 			},
 			getMore() {

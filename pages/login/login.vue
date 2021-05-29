@@ -99,7 +99,7 @@
 					delta: 1 //返回一层
 				});
 			},
-			toMain(userName) {
+			toMain(username) {
 				console.log("toMain")
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
@@ -108,7 +108,7 @@
 				// uni.reLaunch({
 				// 	url: '../my/my',
 				// });
-				
+
 				// 无需强制登录，不登录不能进行相关操作即可
 				this.navBack()
 			},
@@ -212,11 +212,12 @@
 						params: data
 					},
 					success: (res) => {
+						console.log('登录成功：', res.result)
 						if (res.result.code == 0) {
 							// code:0,msg:"登录成功"
 							this.needCaptcha = false;
 							uni.setStorageSync('uni-needCaptcha', this.needCaptcha)
-							uni.setStorageSync('uni_id_token', res.result.token)
+							uni.setStorageSync('uni_id_token', res.result.token) // 这条有用
 							uni.setStorageSync('username', res.result.username)
 							uni.setStorageSync('login_type', 'online')
 							uni.setStorageSync('uni_id_has_pwd', true)

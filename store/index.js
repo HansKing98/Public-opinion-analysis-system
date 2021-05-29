@@ -17,19 +17,29 @@ const store = new Vuex.Store({
 		 */
 		forcedLogin: false,
 		hasLogin: false,
-		userName: "",
+		username: "",
+		userInfo: {},
 		uni_id_token: "",
 		univerifyErrorMsg: "",
 		hideUniverify: true
 	},
 	mutations: {
-		// 登录
-		login(state, userName) {
-			state.userName = userName || '新用户';
+		// 模拟本地登录， 不可用
+		setUserInfo(state, userInfo) {
+			state.userInfo = userInfo
+			// 获取用户信息 同时将 hasLogin 设为 true
+			state.hasLogin = true
+		},
+		setLogout(state) {
+			state.userInfo = {}
+			state.hasLogin = false
+		},
+		login(state, username) {
+			state.username = username || '新用户';
 			state.hasLogin = true;
 		},
 		logout(state) {
-			state.userName = "";
+			state.username = "";
 			state.hasLogin = false;
 		},
 		setUniverifyErrorMsg(state, payload = '') {

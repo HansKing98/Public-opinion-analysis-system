@@ -3,15 +3,19 @@
 		<view class="personal ripple" @click="toLogin()">
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
-				<view class="personal-info">
-					<view class="">hAns King</view>
-					<view class="">10001</view>
+				<view class="personal-info" v-if="hasLogin">
+					<view class="">{{userInfo.username}}</view>
+					<view class="">{{userInfo._id}}</view>
+				</view>
+				<view class="personal-info" v-else>
+					<view class="">点击头像登录</view>
 				</view>
 			</view>
 			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
 		</view>
 		<view class="n-p ripple" v-for="(item,index) in list" :key="index" hover-class="hover-class"
-			@click="onClick(item)">
+			@click="onClick(item)" v-if="item.type !== 'logout' || hasLogin">
+			<!-- logout 选项，在登录后才显示 -->
 			<view style="position: relative">
 				<view class="p-left">
 					<u-icon :name="item.icon" size="45" color="#949696"></u-icon>
@@ -33,45 +37,62 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	export default {
+		computed: mapState(['hasLogin', 'userInfo']),
 		data() {
 			return {
-				avatar:"/static/avatar/boy.png", //默认头像
+				avatar: "/static/avatar/boy.png", //默认头像
 				list: [{
 					name: '消息',
-					id: 'xiaoxi',
+					type: 'xiaoxi',
 					icon: 'bell-fill',
 					iconBackground: '#398c0c',
 				}, {
 					name: '收藏',
-					id: 'favorites',
+					type: 'favorites',
 					icon: 'star-fill',
 					iconBackground: '#398c0c',
 				}, {
 					name: '评论',
-					id: 'photoAlbum',
+					type: 'photoAlbum',
 					icon: 'more-circle-fill',
 					iconBackground: '#5e2d88',
 				}, {
 					name: '点赞',
-					id: 'cardPackage',
+					type: 'cardPackage',
 					icon: 'thumb-up-fill',
 					iconBackground: '#33696c',
 				}, {
 					name: '设置',
-					id: 'setUp',
+					type: 'setUp',
 					icon: 'setting-fill',
 					iconBackground: '#3b2021',
 				}, {
 					name: '注销登录',
-					id: 'logout',
+					type: 'logout',
 					icon: 'zhuanfa',
 					iconBackground: '#833456',
 				}],
 			}
 		},
 		methods: {
-			onClick(item) {},
+			...mapMutations(['setLogout']), // 注销登录
+			onClick(item) {
+				console.log('choose-', item.name)
+				if (item.type === 'logout') this.handleLogout()
+			},
+			handleLogout() {
+				this.setLogout()
+				uni.removeStorageSync('uni-needCaptcha');
+				uni.removeStorageSync('uni_id_token');
+				uni.removeStorageSync('username');
+				uni.removeStorageSync('login_type');
+				uni.removeStorageSync('uni_id_has_pwd');
+			},
 			toLogin() {
 				uni.navigateTo({
 					url: '/pages/login/login'
