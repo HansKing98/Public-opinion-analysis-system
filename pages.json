@@ -19,7 +19,9 @@
 				"app-plus": {
 					"titleNView": {
 						"type": "transparent"
-					}
+					},
+					"animationType": "slide-in-bottom",
+					"animationDuration": 100
 				}
 			}
 		},
@@ -32,8 +34,10 @@
 				"app-plus": {
 					"titleNView": {
 						// "type": "transparent"
-					}
+					},
+					"animationType": "slide-in-right"
 				}
+
 			}
 		},
 		{

@@ -1,8 +1,8 @@
 <template>
 	<view class="content" @touchstart="start" @touchend="end">
 		<view @click="showDrawer" class="navbar-index drawer ripple" :class="drawer?'drawer-open':''">
-			<u-avatar src="https://image.hansking.cn/uPic/202105/QabSKj.png" size="100" mode="square"
-				class="u-avatar"></u-avatar>
+			<u-avatar src="https://image.hansking.cn/uPic/202105/QabSKj.png" size="100" mode="square" class="u-avatar">
+			</u-avatar>
 			<view class="user-name">hAns King</view>
 		</view>
 
@@ -48,14 +48,23 @@
 				scrollTop: 0
 			}
 		},
+		onLoad(option) {
+			console.log("option", option)
+
+		},
 		mounted() {
 			this.get()
 			// this.$refs.DrawerLeft.open()
 		},
 		onPullDownRefresh() {
-			this.pageData.page = 0
-			// console.log(this.pageData.page)
-			this.get();
+			if (!this.drawer) {
+				this.pageData.page = 0
+				// console.log(this.pageData.page)
+				this.get();
+			}else{
+				uni.stopPullDownRefresh()
+				
+			}
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop;
@@ -182,11 +191,13 @@
 		display: flex;
 		align-items: center;
 		background-image: linear-gradient(45deg, #4facfe, #00f2fe);
-		&:active{
+
+		&:active {
 			.u-avatar {
 				transform: scale(1.4);
 			}
 		}
+
 		.u-avatar {
 			padding: 20rpx;
 			transition: all 0.1s ease;

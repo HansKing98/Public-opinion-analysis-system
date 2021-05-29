@@ -1,11 +1,11 @@
 <template>
 	<view class="content">
 		<view class="login-type">
-			<view v-for="(item,index) in loginTypeList" :key="index" @click="loginType = index"
-				:class="{act: loginType === index}" class="login-type-btn">{{item}}</view>
+			<view v-for="(item,index) in loginTypeList" :key="index" @click="loginType = index" :class="{act: loginType === index}"
+			 class="login-type-btn">{{item}}</view>
 		</view>
-		<view class="input-group" v-if="loginType === 1">
-			<view class="input-row">
+		<view class="input-group" v-if="loginType === 0">
+			<view class="input-row border">
 				<text class="title">手机：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="mobile" placeholder="请输入手机号码"></m-input>
 			</view>
@@ -16,11 +16,11 @@
 			</view>
 		</view>
 		<view class="input-group" v-else>
-			<view class="input-row">
+			<view class="input-row border">
 				<text class="title">账号：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="username" placeholder="请输入账号"></m-input>
 			</view>
-			<view class="input-row">
+			<view class="input-row border">
 				<text class="title">密码：</text>
 				<m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
 			</view>
@@ -37,9 +37,21 @@
 			<button type="primary" class="primary" :loading="loginBtnLoading" @tap="bindLogin">登录</button>
 		</view>
 		<view class="action-row">
-			<navigator url="../login/reg">注册账号</navigator>
+			<navigator url="../reg/reg">注册账号</navigator>
 		</view>
-		<u-toast ref="uToast" />
+		<view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
+			<view class="oauth-image" v-for="provider in providerList" :key="provider.value">
+				<image :src="provider.image" @tap="toLogin(provider.value)"></image>
+				<!-- #ifdef MP-WEIXIN -->
+				<button v-if="!isDevtools" open-type="getUserInfo" @getuserinfo="getUserInfo"></button>
+				<!-- #endif -->
+			</view>
+		</view>
+		<view class="oauth-row" v-if="hasProvider && !hasAppleLogin && platform ==='ios'" v-bind:style="{top: (positionTop - 50) + 'px'}">
+			<text style="color: #C8C7CC;text-align: center;">暂无法使用苹果登录，请查阅&nbsp;&nbsp;
+				<text style="color: #C8C7CC;text-decoration: underline;" @click="openAppleLoginDoc">Apple登录集成教程</text>
+			</text>
+		</view>
 	</view>
 </template>
 
@@ -69,16 +81,20 @@
 		},
 		data() {
 			return {
+				platform: uni.getSystemInfoSync().platform,
 				loginType: 0,
-				loginTypeList: ['密码登录', '免密登录'],
+				loginTypeList: ['免密登录', '密码登录'],
 				mobile: '',
 				code: '',
+				providerList: [],
+				hasProvider: false,
 				username: '',
 				password: '',
 				positionTop: 0,
 				isDevtools: false,
 				codeDuration: 0,
 				loginBtnLoading: false,
+				hasAppleLogin: false,
 				needCaptcha: uni.getStorageSync('uni-needCaptcha'),
 				captchaing: false,
 				captchaBase64: '',
@@ -87,6 +103,16 @@
 		},
 		computed: mapState(['forcedLogin', 'hasLogin', 'univerifyErrorMsg', 'hideUniverify']),
 		onLoad() {
+			// #ifdef APP-PLUS
+			plus.oauth.getServices((services) => {
+				weixinAuthService = services.find((service) => {
+					return service.id === 'weixin'
+				})
+				if (weixinAuthService) {
+					this.hasWeixinAuth = true
+				}
+			});
+			// #endif
 			if (this.needCaptcha) {
 				this.captcha('createCaptcha')
 			}
@@ -95,6 +121,29 @@
 			...mapMutations(['login']),
 			initProvider() {
 				const filters = ['weixin', 'qq', 'sinaweibo', 'univerify'];
+				uni.getProvider({
+					service: 'oauth',
+					success: (res) => {
+						if (res.provider && res.provider.length) {
+							if (res.provider.indexOf('apple') !== -1) {
+								this.hasAppleLogin = true;
+							}
+							for (let i = 0; i < res.provider.length; i++) {
+								const curProvider = res.provider[i];
+								if (~filters.indexOf(curProvider)) {
+									this.providerList.push({
+										value: curProvider,
+										image: '../../static/img/' + curProvider + '.png'
+									});
+								}
+							}
+							this.hasProvider = true;
+						}
+					},
+					fail: (err) => {
+						console.error('获取服务供应商失败：' + JSON.stringify(err));
+					}
+				});
 			},
 			initPosition() {
 				/**
@@ -109,11 +158,9 @@
 						content: `请在${this.codeDuration}秒后重试`,
 						showCancel: false
 					})
-					return
 				}
 				if (!/^1\d{10}$/.test(this.mobile)) {
 					uni.showModal({
-						title: "提示",
 						content: '手机号码填写错误',
 						showCancel: false
 					})
@@ -128,11 +175,9 @@
 							type: 'login'
 						}
 					},
-					success: (res) => {
-						if (res.result.code == 0) {
-							// code: 0, message: "验证码获取成功"
+					success: (e) => {
+						if (e.result.code == 0) {
 							uni.showModal({
-								title: "提示",
 								content: '验证码发送成功，请注意查收',
 								showCancel: false
 							})
@@ -148,7 +193,7 @@
 							}, 1000)
 						} else {
 							uni.showModal({
-								content: '验证码发送失败：' + res.result.msg,
+								content: '验证码发送失败：' + e.result.msg,
 								showCancel: false
 							})
 						}
@@ -194,36 +239,23 @@
 						action: 'login',
 						params: data
 					},
-					success: (res) => {
-						if (res.result.code == 0) {
-							// code:0,msg:"登录成功"
-							this.toMain(12);
+					success: (e) => {
+						if (e.result.code == 0) {
 							this.needCaptcha = false;
 							uni.setStorageSync('uni-needCaptcha', this.needCaptcha)
 
-							uni.setStorageSync('uni_id_token', res.result.token)
-							uni.setStorageSync('username', res.result.username)
+							uni.setStorageSync('uni_id_token', e.result.token)
+							uni.setStorageSync('username', e.result.username)
 							uni.setStorageSync('login_type', 'online')
 							uni.setStorageSync('uni_id_has_pwd', true)
-							// this.vuex_user.hasLogin = true
-							// this.vuex_user.userName = this.username
-							uni.showToast({
-								title: res.result.msg
-							});
 							this.toMain(this.username);
-						} else if (res.result.code == 10101) {
-							// 
-							this.$refs.uToast.show({
-								title: res.result.msg,
-								type: 'default',
-							})
 						} else {
 							uni.showModal({
-								title: '提示',
-								content: res.result.message,
+								content: e.result.message,
 								showCancel: false
 							})
-							this.needCaptcha = res.result.needCaptcha;
+
+							this.needCaptcha = e.result.needCaptcha;
 							uni.setStorageSync('uni-needCaptcha', this.needCaptcha)
 							if (this.needCaptcha) {
 								this.captcha('createCaptcha')
@@ -244,7 +276,6 @@
 			loginBySms() {
 				if (!/^1\d{10}$/.test(this.mobile)) {
 					uni.showModal({
-						title: "提示",
 						content: '手机号码填写错误',
 						showCancel: false
 					})
@@ -257,7 +288,7 @@
 					});
 					return;
 				}
-				
+
 				uniCloud.callFunction({
 					name: 'user-center',
 					data: {
@@ -267,29 +298,22 @@
 							code: this.code
 						}
 					},
-					success: (res) => {
+					success: (e) => {
 
-						console.log('login success', res);
+						console.log('login success', e);
 
-						if (res.result.code == 0) {
-							// code:0,msg:"登录成功"
-							const username = res.result.username || '手机用户'
-							uni.setStorageSync('uni_id_token', res.result.token)
+						if (e.result.code == 0) {
+							const username = e.result.username || '手机用户'
+							uni.setStorageSync('uni_id_token', e.result.token)
 							uni.setStorageSync('username', username)
 							uni.setStorageSync('login_type', 'online')
 							this.toMain(username);
-							uni.showToast({
-								title: res.result.msg
-							});
 						} else {
-							// code 10002 message: "验证码不可为空"
-							// code 50202 msg:"验证码错误或已失效"
-							this.toMain(1);
 							uni.showModal({
-								content: res.result.msg,
+								content: e.result.msg,
 								showCancel: false
 							})
-							console.log('登录失败', res);
+							console.log('登录失败', e);
 						}
 
 					},
@@ -304,14 +328,38 @@
 			bindLogin() {
 				switch (this.loginType) {
 					case 0:
-						this.loginByPwd()
+						this.loginBySms()
 						break;
 					case 1:
-						this.loginBySms()
+						this.loginByPwd()
 						break;
 					default:
 						break;
 				}
+			},
+			oauth(value) {
+				return new Promise((resolve, reject) => {
+					// #ifdef APP-PLUS
+					weixinAuthService.authorize(function(res) {
+						resolve(res.code)
+					}, function(err) {
+						console.error(err)
+						reject(new Error('微信登录失败'))
+					});
+					// #endif
+					// #ifdef MP-WEIXIN
+					uni.login({
+						provider: 'weixin',
+						success(res) {
+							resolve(res.code)
+						},
+						fail(err) {
+							console.error('授权登录失败：' + JSON.stringify(err));
+							reject(new Error('微信登录失败'))
+						}
+					})
+					// #endif
+				})
 			},
 			getUserInfo({
 				detail
@@ -332,17 +380,24 @@
 				this.toMain(nickName);
 			},
 			toMain(userName) {
-				console.log(1233)
 				this.login(userName);
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
 				uni.reLaunch({
-					url: '../my/my',
+					url: '../main/main',
 				});
 			},
 			toLogin(value) {
+				if (value === 'apple') {
+					this.loginByApple(value)
+					return;
+				}
+				if (value === 'weixin') {
+					this.loginByWeixin(value)
+					return;
+				}
 				if (value === 'univerify') {
 					univerifyLogin().catch(err => {
 						if (typeof err === 'boolean') return;
@@ -379,6 +434,100 @@
 								console.error('授权登录失败：' + JSON.stringify(err));
 							}
 						});
+					}
+				})
+			},
+			loginByWeixin(value) {
+				this.oauth(value).then((code) => {
+					return uniCloud.callFunction({
+						name: 'user-center',
+						data: {
+							action: 'loginByWeixin',
+							params: {
+								code,
+							}
+						}
+					})
+				}).then((res) => {
+					if (res.result.code === 0) {
+
+						uni.setStorageSync('uni_id_token', res.result.token)
+						uni.setStorageSync('uni_id_token_expired', res.result.tokenExpired)
+						uni.setStorageSync('login_type', 'online')
+						uni.setStorageSync('username', '微信用户')
+						this.toMain('微信用户')
+					}
+				}).catch((e) => {
+					console.error(e)
+					uni.showModal({
+						showCancel: false,
+						content: '微信登录失败，请稍后再试'
+					})
+				})
+			},
+			async loginByApple(value) {
+				if (!this.hasAppleLogin) {
+					uni.showModal({
+						showCancel: false,
+						content: `暂无法使用苹果登录，Apple登录集成教程：\nhttps://ask.dcloud.net.cn/article/36651`
+					})
+					return
+				};
+				let Provider = value;
+				const [loginErr, loginData] = await uni.login({
+					provider: Provider
+				});
+				if (loginErr) {
+					uni.showModal({
+						showCancel: false,
+						content: '苹果登录失败，请稍后再试'
+					})
+					return;
+				}
+				// 获取用户信息
+				const [getUserInfoErr, result] = await uni.getUserInfo({
+					provider: Provider
+				});
+				if (getUserInfoErr) {
+					let content = getUserInfoErr.errMsg;
+					if (~content.indexOf('uni.login')) {
+						content = '请先完成登录操作';
+					}
+					uni.showModal({
+						title: '获取用户信息失败',
+						content: '错误原因' + content,
+						showCancel: false
+					});
+					return;
+				}
+				// uni-id 苹果登录
+				uniCloud.callFunction({
+					name: 'user-center',
+					data: {
+						action: 'loginByApple',
+						params: result.userInfo
+					},
+					success: (e) => {
+						console.log('loginByApple success', e);
+						if (!e.success) {
+							uni.showModal({
+								showCancel: false,
+								content: JSON.stringify(e.message)
+							})
+							return;
+						}
+						const username = e.result.username || e.result.nickname;
+
+						uni.setStorageSync('uni_id_token', e.result.token)
+						uni.setStorageSync('login_type', 'online')
+
+						this.toMain(username);
+					},
+					fail: (e) => {
+						uni.showModal({
+							content: `苹果登录失败: ${JSON.stringify(e)}`,
+							showCancel: false
+						})
 					}
 				})
 			},
@@ -421,25 +570,14 @@
 		onReady() {
 			this.initPosition();
 			this.initProvider();
+			// #ifdef MP-WEIXIN
+			this.isDevtools = uni.getSystemInfoSync().platform === 'devtools';
+			// #endif
 		}
 	}
 </script>
 
 <style>
-	.content {
-		font-size: 12px;
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-		background-color: #efeff4;
-		padding: 10px;
-	}
-
-	.uni-input {
-		border: none !important;
-		margin-top: 15px;
-	}
-
 	.login-type {
 		display: flex;
 		justify-content: center;

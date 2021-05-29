@@ -22,7 +22,7 @@
         "distribute" : {
             /* android打包配置 */
             "android" : {
-                "permissions" : []
+                "permissions" : [ "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>" ]
             },
             /* ios打包配置 */
             "ios" : {

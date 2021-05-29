@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="personal ripple">
+		<view class="personal ripple" @click="toLogin()">
 			<view class="personal-main">
 				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
 				<view class="personal-info">
@@ -72,12 +72,16 @@
 		},
 		methods: {
 			onClick(item) {},
+			toLogin() {
+				uni.navigateTo({
+					url: '/pages/login/login'
+				});
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-
 	page {
 		background-color: #f7f7f7;
 		max-width: 100vw;
@@ -117,14 +121,16 @@
 	}
 
 	.hover-class {
-		background-color: #efefef;
+		background-image: linear-gradient(to right, #eee, transparent);
+		color: t;
+		width: 99%;
 	}
 
 	.n-p {
 		max-width: 100vw;
 		display: flex;
 		align-items: center;
-		background-color: #ffffff;
+		background-color: none;
 		margin-bottom: 20rpx;
 	}
 

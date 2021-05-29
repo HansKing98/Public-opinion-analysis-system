@@ -46,7 +46,7 @@
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式
 				 */
-				console.log('toMain:',userName)
+				console.log('toMain:', userName)
 				uni.reLaunch({
 					url: '../my/my',
 				});
@@ -97,16 +97,20 @@
 							uni.showToast({
 								title: res.result.msg
 							});
+							uni.setStorageSync('uni-needCaptcha', false) // 不需要验证登录状态
 							uni.setStorageSync('uni_id_token', res.result.token)
 							uni.setStorageSync('username', res.result.username)
-						}else if(res.result.code == 20102){
+							uni.setStorageSync('login_type', 'online')
+							uni.setStorageSync('uni_id_has_pwd', true)
+
+						} else if (res.result.code == 20102) {
 							// code: 20102,message: "用户名已存在"
 
 							that.$refs.uToast.show({
 								title: res.result.msg,
 								type: 'default',
 							})
-						}else {
+						} else {
 							uni.showModal({
 								content: JSON.stringify(res.result),
 								showCancel: false
