@@ -23,6 +23,32 @@
 				}
 			}
 		},
+		// 登录页 注册页
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录页",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView": {
+						// "type": "transparent"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/login/reg",
+			"style": {
+				"navigationBarTitleText": "注册页",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView": {
+						// "type": "transparent"
+					}
+				}
+			}
+		},
+		// 更新页
 		{
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
 			"style": {
