@@ -119,10 +119,11 @@
 				this.$refs.DrawerLeft.close();
 			},
 			get() {
-				uni.showLoading({
-					title: '正在加载更多...'
-				})
-
+				if (this.pageData.page === 0) {
+					uni.showLoading({
+						title: '正在加载数据...'
+					})
+				}
 				uniCloud.callFunction({
 					name: 'get-weibo-hot',
 					data: this.pageData
