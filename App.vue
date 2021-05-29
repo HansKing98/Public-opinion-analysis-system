@@ -22,23 +22,7 @@
 			checkUpdate() //更新升级
 		},
 		onShow: function() {
-			// 调试使用 屏幕常亮
-			// 已开启 WAKE_LOCK 权限
-			// plus.device.setWakelock(true)
-			// uni.setKeepScreenOn({
-			// 	keepScreenOn: true,
-			// 	success: (res) => {
-			// 		console.log(res)
-			// 		uni.showToast({
-			// 			title: '已设置屏幕常亮'
-			// 		})
-			// 	},
-			// 	fail: (error) => {
-			// 		console.error(error)
-			// 	}
-			// })
-			// plus.device.setWakelock();
-			// plus.device.isWakelock();
+
 		},
 		onHide: function() {
 			console.log('App Hide')
@@ -46,17 +30,22 @@
 		methods: {
 			...mapMutations(['login', 'logout']), // 验证登录 和 注销登录方法
 			getUserInfo() {
+				// 通过比对 token 检查用户登录信息
 				let that = this
 				uniCloud.callFunction({
-					name: 'uni-id-test',
+					name: 'user-center',
 					data: {
 						action: 'getUserInfo',
 					},
 					success(res) {
+						console.log("getUserInfo", res.result)
 						if (res.result.code == 0) {
 							console.log("有效登录")
+							// 存储 Vuex 
+							
 						} else {
 							that.logout();
+							console.log("登录失效或未登录")
 						}
 					},
 					fail(e) {

@@ -36,7 +36,7 @@
 	export default {
 		data() {
 			return {
-				avatar: 'https://image.hansking.cn/uPic/202105/QabSKj.png',
+				avatar:"/static/avatar/boy.png", //默认头像
 				list: [{
 					name: '消息',
 					id: 'xiaoxi',

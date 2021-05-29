@@ -7,7 +7,7 @@ const dbCmd = db.command
 
 exports.main = async (event, context) => {
 	let params = event.params || {}
-	
+
 	// 登录记录
 	const loginLog = async (res = {}, type = 'login') => {
 		const now = Date.now()
@@ -49,7 +49,7 @@ exports.main = async (event, context) => {
 
 		return recentRecord.data.filter(item => item.state === 0).length === recordSize;
 	}
-	
+
 	//event为客户端上传的参数
 	console.log('event : ' + event)
 
@@ -59,7 +59,8 @@ exports.main = async (event, context) => {
 		'login', 'logout', 'sendSmsCode',
 		'loginBySms', 'inviteLogin', 'loginByUniverify',
 		'loginByApple', 'createCaptcha', 'verifyCaptcha',
-		'refreshCaptcha'
+		'refreshCaptcha',
+		'getUserInfo'
 	]
 
 	if (noCheckAction.indexOf(event.action) === -1) {
@@ -79,24 +80,37 @@ exports.main = async (event, context) => {
 	let res = {}
 
 	switch (event.action) {
+		case 'getUserInfo':
+			payload = await uniID.checkToken(event.uniIdToken)
+			// console.log("payload.uid", payload, params.uid)
+			if (payload.code) {
+				return payload
+			}
+			res = await uniID.getUserInfo({
+				uid: payload.uid,
+				field: ['_id', 'username', 'nickname', 'area', 'birthday', 'description', 'gender',
+					'headimg', 'mobile', 'username'
+				]
+			})
+			break;
 		case 'register':
 			res = await uniID.register(params);
 			break;
 		case 'login':
 			let passed = false;
 			let needCaptcha = await getNeedCaptcha();
-			
+
 			if (needCaptcha) {
 				res = await uniCaptcha.verify(params)
 				if (res.code === 0) passed = true;
 			}
-			
+
 			if (!needCaptcha || passed) {
 				res = await uniID.login(params);
 				await loginLog(res);
 				needCaptcha = await getNeedCaptcha();
 			}
-			
+
 			res.needCaptcha = needCaptcha;
 			break;
 		case 'loginByWeixin':

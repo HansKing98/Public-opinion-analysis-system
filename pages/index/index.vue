@@ -1,7 +1,7 @@
 <template>
 	<view class="content" @touchstart="start" @touchend="end">
 		<view @click="showDrawer" class="navbar-index drawer ripple" :class="drawer?'drawer-open':''">
-			<u-avatar src="https://image.hansking.cn/uPic/202105/QabSKj.png" size="100" mode="square" class="u-avatar">
+			<u-avatar :src="avatar" size="100" mode="square" class="u-avatar">
 			</u-avatar>
 			<view class="user-name">hAns King</view>
 		</view>
@@ -45,7 +45,8 @@
 				},
 				drawer: false,
 				startData: {},
-				scrollTop: 0
+				scrollTop: 0,
+				avatar: "/static/avatar/boy.png" // 默认头像
 			}
 		},
 		onLoad(option) {
@@ -56,14 +57,22 @@
 			this.get()
 			// this.$refs.DrawerLeft.open()
 		},
+		onShow() {
+			console.log('show Index')
+			// 如登录后重新获取用户数据
+		},
+		onHide() {
+			console.log('hide Index')
+			// 跳到其他页面后
+		},
 		onPullDownRefresh() {
 			if (!this.drawer) {
 				this.pageData.page = 0
 				// console.log(this.pageData.page)
 				this.get();
-			}else{
+			} else {
 				uni.stopPullDownRefresh()
-				
+
 			}
 		},
 		onPageScroll(e) {
