@@ -1,9 +1,9 @@
 <template>
 	<view class="content" @touchstart="start" @touchend="end">
 		<view @click="showDrawer" class="navbar-index drawer ripple" :class="drawer?'drawer-open':''">
-			<u-avatar :src="avatar" size="100" mode="square" class="u-avatar">
+			<u-avatar :src="hasLogin ? userInfo.headimg:avatar" size="100" mode="square" class="u-avatar">
 			</u-avatar>
-			<view class="user-name" v-if="hasLogin">{{userInfo.username || userInfo.mobile}}</view>
+			<view class="user-name" v-if="hasLogin">{{userInfo.nickname || userInfo.username || userInfo.mobile}}</view>
 		</view>
 
 		<view class="card-bg drawer" :class="drawer?'drawer-open':''">
@@ -61,7 +61,7 @@
 		mounted() {
 			this.get()
 			// this.$refs.DrawerLeft.open()
-			// this.showDrawer()
+			this.showDrawer()
 		},
 		onShow() {
 			console.log('show Index')
@@ -173,7 +173,6 @@
 						action: 'getUserInfo',
 					},
 					success(res) {
-						console.log("getUserInfo", res.result)
 						if (res.result.code == 0) {
 							that.setUserInfo({
 								...res.result.userInfo

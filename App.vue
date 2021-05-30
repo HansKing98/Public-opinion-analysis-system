@@ -39,9 +39,9 @@
 					},
 					success(res) {
 						// token 比对成功返回用户信息
-						console.log("getUserInfo", res.result)
+						// console.log("getUserInfo", res.result)
 						if (res.result.code == 0) {
-							console.log("有效登录")
+							// console.log("有效登录")
 							// 存储 Vuex 
 							// let name = uni.getStorageSync('userInfo')
 							that.setUserInfo({

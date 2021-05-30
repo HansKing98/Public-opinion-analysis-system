@@ -16,6 +16,7 @@ exports.main = async (event, context) => {
 		'setVerifyCode', 'loginBySms', 'loginByEmail', 'code2SessionWeixin', 'code2SessionAlipay',
 		'getUserInfo'
 	]
+	// 主要使用了这里的修改用户信息项
 	if (noCheckAction.indexOf(event.action) === -1) {
 		if (!event.uniIdToken) {
 			return {

@@ -1,10 +1,11 @@
 <template>
 	<view>
-		<view class="personal ripple" @click="toLogin()">
+		<view class="personal ripple" @click="!hasLogin ? toLogin():toMydetail()">
 			<view class="personal-main">
-				<u-avatar :src="avatar" mode="square" size="120" class="u-avatar"></u-avatar>
+				<u-avatar :src="hasLogin ? userInfo.headimg :avatar" mode="square" size="120" class="u-avatar">
+				</u-avatar>
 				<view class="personal-info" v-if="hasLogin">
-					<view class="">{{userInfo.username || userInfo.mobile}}</view>
+					<view class="">{{userInfo.nickname || userInfo.username || userInfo.mobile}}</view>
 					<view class="">{{userInfo._id.slice(14)}}</view>
 				</view>
 				<view class="personal-info" v-else>
@@ -14,8 +15,8 @@
 			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
 		</view>
 		<view class="n-p ripple" v-for="(item,index) in list" :key="index" hover-class="hover-class"
-			@click="onClick(item)" v-if="item.type !== 'logout' || hasLogin">
-			<!-- logout 选项，在登录后才显示 -->
+			@click="onClick(item)" v-if=" !['logout', 'setting'].includes(item.type) || hasLogin">
+			<!-- ['logout','setting'] 选项，在登录后才显示 -->
 			<view style="position: relative">
 				<view class="p-left">
 					<u-icon :name="item.icon" size="45" color="#949696"></u-icon>
@@ -68,7 +69,7 @@
 					iconBackground: '#33696c',
 				}, {
 					name: '设置',
-					type: 'setUp',
+					type: 'setting',
 					icon: 'setting-fill',
 					iconBackground: '#3b2021',
 				}, {
@@ -95,7 +96,17 @@
 					});
 					return
 				}
-				console.log(123)
+				let url = ''
+				switch (item.type) {
+					case 'setting':
+						url = '/pages/setting/setting'
+						break;
+					default:
+						break;
+				}
+				uni.navigateTo({
+					url
+				})
 			},
 			handleLogout() {
 				this.setLogout()
@@ -109,6 +120,9 @@
 				uni.navigateTo({
 					url: '/pages/login/login'
 				});
+			},
+			toMydetail() {
+				console.log('my')
 			}
 		}
 	}

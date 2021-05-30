@@ -39,7 +39,6 @@
 		<view class="action-row">
 			<navigator url="../login/reg">注册账号</navigator>
 		</view>
-		<u-button @click="navBack">返回</u-button>
 		<u-toast ref="uToast" />
 	</view>
 </template>
