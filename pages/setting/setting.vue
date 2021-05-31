@@ -202,47 +202,6 @@
 					}
 				})
 			},
-			avatarChoose2() {
-				let that = this;
-				// uni.chooseImage({
-				// 	count: 1,
-				// 	sizeType: ['original', 'compressed'],
-				// 	sourceType: ['album', 'camera'],
-				// 	success(res) {
-				// 		// console.log("that.nickname", that.nickname);
-				// 		// console.log("success res", res);
-				// 		if (res.tempFilePaths.length > 0) {
-				// 			let filePath = res.tempFilePaths[0]
-				// 			console.log("filePath", filePath)
-				// 			//进行上传操作
-				// 			// callback方式，与promise方式二选一即可
-				// 			uniCloud.uploadFile({
-				// 				filePath: filePath,
-				// 				// 换成 uni-id
-				// 				cloudPath: that.nickname + "_avatar.jpg",
-				// 				onUploadProgress: function(progressEvent) {
-				// 					var percentCompleted = Math.round(
-				// 						(progressEvent.loaded * 100) / progressEvent
-				// 						.total
-				// 					);
-				// 					console.log("上传中：已上传", percentCompleted);
-				// 					that.uploadProgress = percentCompleted
-				// 				},
-				// 				success(res) {
-				// 					console.log("res", res)
-				// 					that.headimg = res.fileID
-				// 				},
-				// 				fail(e) {
-				// 					console.log(e)
-				// 				},
-				// 				complete() {}
-				// 			});
-
-				// 		}
-				// 	}
-				// });
-
-			},
 			getphonenumber(e) {
 
 				if (e.detail.iv) {
@@ -335,11 +294,17 @@
 						params
 					},
 					success(res) {
-						uni.showModal({
-							showCancel: false,
-							content: JSON.stringify(res.result)
+						uni.showToast({
+							icon: 'none',
+							title: res.result.msg + "，正在返回首页...",
+							success: function(res) {
+								setTimeout(function() {
+									uni.navigateTo({
+										url: '/pages/index/index'
+									});
+								}, 1000)
+							}
 						})
-						that.getUserInfo()
 					},
 					fail(e) {
 						console.error(e)
