@@ -188,12 +188,13 @@
 		methods: {
 			...mapMutations(['setUserInfo']),
 			clickPraiseComment(e){
+				console.log(e)
 				let that = this
 				uniCloud.callFunction({
 					name: 'set-praise',
 					data: {
-						"comment_id": "60b7874c1ccee700015d5f8e",
-						"user_id": "60b1f6bfa30ce800016fb599",
+						"comment_id": e._id,
+						"user_id": that.userInfo._id,
 						"type": "praise"
 					},
 					success(res) {
