@@ -8,44 +8,50 @@
 		配置参数请用在线生成工具(http://demo.ucharts.cn/)生成
 		3、class="charts-box"这个样式，指定了高度，如果你的父元素有固定高度，请修改为height:100%
 		-->
-		<u-cell-item icon="heart-fill" title="舆情词云图" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
-		<view class="charts-box">
-			<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none"
-				:errorMessage="errorMsgwordCloud" />
-		</view>
+		<view v-if="false">
 
-		<u-cell-item icon="heart-fill" title="热度走势" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
-		<div class="text-center margin-10"><span class="color_blue">
-				<u-icon name="integral-fill"></u-icon> 最高{{TrendExtend.max}}
-			</span> <span class="color_green">
-				<u-icon name="more-dot-fill"></u-icon> 均值{{TrendExtend.avgHot}}
-			</span></div>
-		<view class="charts-box-trend">
-			<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
-				:opts="chartHotTrendOpts" :errorMessage="errorMsgHotTrend" />
-		</view>
+			<u-cell-item icon="heart-fill" title="舆情词云图" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
+			<view class="charts-box">
+				<qiun-data-charts type="word" :chartData="chartDataWord" :loadingType="5" background="none"
+					:errorMessage="errorMsgwordCloud" />
+			</view>
 
-		<u-cell-item icon="heart-fill" title="情绪占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
-		<view class="charts-box-emotion">
-			<qiun-data-charts type="emotionProportion" :chartData="chartEmotionProportion" background="none"
-				:animation="true" :errorMessage="errorMsgEmotion" />
-		</view>
+			<u-cell-item icon="heart-fill" title="热度走势" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
+			<div class="text-center margin-10"><span class="color_blue">
+					<u-icon name="integral-fill"></u-icon> 最高{{TrendExtend.max}}
+				</span> <span class="color_green">
+					<u-icon name="more-dot-fill"></u-icon> 均值{{TrendExtend.avgHot}}
+				</span></div>
+			<view class="charts-box-trend">
+				<qiun-data-charts type="hotTrend" :chartData="chartHotTrend" background="none" :animation="true"
+					:opts="chartHotTrendOpts" :errorMessage="errorMsgHotTrend" />
+			</view>
 
-		<u-cell-item icon="heart-fill" title="敏感占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
-		<div class="text-center margin-10"><span class="color_blue">
-				<u-icon name="heart-fill"></u-icon> 非敏感
-			</span> <span class="color_green">
-				<u-icon name="heart-fill"></u-icon> 中性
-			</span> <span class="color_yellow">
-				<u-icon name="heart-fill"></u-icon> 敏感
-			</span></div>
-		<view class="charts-box2">
+			<u-cell-item icon="heart-fill" title="情绪占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
+			<view class="charts-box-emotion">
+				<qiun-data-charts type="emotionProportion" :chartData="chartEmotionProportion" background="none"
+					:animation="true" :errorMessage="errorMsgEmotion" />
+			</view>
 
-			<qiun-data-charts type="MinGanPRing" :chartData="emotion1" :loadingType="3" background="none"
-				:animation="true" :opts="{title:{name:'男'}}" />
-			<qiun-data-charts type="MinGanPRing" :chartData="emotion2" :loadingType="2" background="none"
-				:animation="true" :opts="{title:{name:'女'}}" />
+			<u-cell-item icon="heart-fill" title="敏感占比" :arrow="false" hover-class="cell-hover-class"></u-cell-item>
+			<div class="text-center margin-10"><span class="color_blue">
+					<u-icon name="heart-fill"></u-icon> 非敏感
+				</span> <span class="color_green">
+					<u-icon name="heart-fill"></u-icon> 中性
+				</span> <span class="color_yellow">
+					<u-icon name="heart-fill"></u-icon> 敏感
+				</span></div>
+			<view class="charts-box2">
+
+				<qiun-data-charts type="MinGanPRing" :chartData="emotion1" :loadingType="3" background="none"
+					:animation="true" :opts="{title:{name:'男'}}" />
+				<qiun-data-charts type="MinGanPRing" :chartData="emotion2" :loadingType="2" background="none"
+					:animation="true" :opts="{title:{name:'女'}}" />
+			</view>
 		</view>
+		<five-mul-commentlist :commentList="commentList" @clickPraise="clickPraiseComment"
+			@clickDelete="clickDeleteComment" @clickDeleteChild="clickDeleteCommentChild"
+			@clickRecomment="clickRecomment" @clickRecommentChild="clickRecommentChild"></five-mul-commentlist>
 
 		<view class="footer-bar">
 			<view class="u-flex my-page-footer">
@@ -67,6 +73,7 @@
 </template>
 
 <script>
+	import fiveMulCommentlist from '@/components/five-mul-commentlist/five-mul-commentlist.vue';
 	//下面是演示数据，您的项目不需要引用，数据需要您从服务器自行获取
 	import demodata from '@/mockdata/demodata.json';
 	import mapdata from '@/mockdata/mapdata.json'
@@ -83,11 +90,14 @@
 	} from '@/utils/index.js'
 
 	import {
-		mapState
+		mapState,
+		mapMutations
 	} from 'vuex'
 
 	export default {
-		components: {},
+		components: {
+			fiveMulCommentlist
+		},
 		computed: mapState(['hasLogin', 'userInfo']),
 		data() {
 			return {
@@ -110,6 +120,39 @@
 					page: 0,
 					pageSize: 30
 				},
+				// commentList: [{
+				// 	"COMMENT_TIME": "2020/1/2 10:01",
+				// 	"FIRSTNICKNAME": "nickname",
+				// 	"IS_PRAISE": null,
+				// 	"COMMENT": "xxx",
+				// 	"PRAISE_NUM": 10,
+				// 	"CANDELETE": 0,
+				// 	"HEADIMGURL": "https://img-cdn-aliyun.dcloud.net.cn/stream/plugin_screens/52f83b00-8ac3-11ea-92e4-6962457f811b_0.jpg?v=1588238334",
+				// 	"PARENTID": "",
+				// 	"SECONDNICKNAME": null,
+				// 	"CHILD_ANWSER_LIST": [{
+				// 		"COMMENT_TIME": "2020/1/2 10:02",
+				// 		"FIRSTNICKNAME": "nickname",
+				// 		"IS_PRAISE": null,
+				// 		"COMMENT": "xxxx",
+				// 		"PRAISE_NUM": 0,
+				// 		"CANDELETE": 0,
+				// 		"HEADIMGURL": "",
+				// 		"SECONDNICKNAME": ""
+				// 	}]
+				// },{
+				// 	"COMMENT_TIME": "2020/1/2 10:01",
+				// 	"FIRSTNICKNAME": "nickname",
+				// 	"IS_PRAISE": null,
+				// 	"COMMENT": "xxx",
+				// 	"PRAISE_NUM": 10,
+				// 	"CANDELETE": 0,
+				// 	"HEADIMGURL": "https://img-cdn-aliyun.dcloud.net.cn/stream/plugin_screens/52f83b00-8ac3-11ea-92e4-6962457f811b_0.jpg?v=1588238334",
+				// 	"PARENTID": "",
+				// 	"SECONDNICKNAME": null,
+				// 	"CHILD_ANWSER_LIST": []
+				// }]
+				commentList:[]
 			}
 		},
 		onLoad(option) {
@@ -141,17 +184,36 @@
 			// 静态数据
 			this.getServerData()
 			// 云数据库数据
-			if (this.hotword) {
-				this.get({
-					hotword: this.hotword
-				})
-			} else {
-				this.chartDataWord = {}
-			}
-
+			// if (this.hotword) {
+			// 	this.get({
+			// 		hotword: this.hotword
+			// 	})
+			// } else {
+			// 	this.chartDataWord = {}
+			// }
+		},
+		onShow() {
 
 		},
 		methods: {
+			...mapMutations(['setUserInfo']),
+			getUserInfo() {
+				// 通过比对 token 检查用户登录信息
+				let that = this
+				uniCloud.callFunction({
+					name: 'user-center',
+					data: {
+						action: 'getUserInfo',
+					},
+					success(res) {
+						if (res.result.code == 0) {
+							that.setUserInfo({
+								...res.result.userInfo
+							})
+						}
+					}
+				})
+			},
 			// 返回
 			goBack() {
 				uni.navigateBack();
@@ -165,15 +227,36 @@
 						pageSize: this.pageData.pageSize
 					}
 				}).then((res) => {
-					console.log('comment:', res)
+					console.log('comment:', res.result.data)
 					if (this.pageData.page == 0 && res.result.data.length == 0) {
-						// uni.showToast({
-						// 	title: '未发现评论',
-						// 	icon: "none"
-						// })
+						uni.showToast({
+							title: '未发现评论',
+							icon: "none"
+						})
 					} else {
-						let list = res.result.data
-						this.listData = this.pageData.page == 0 ? list : this.listData.concat(list);
+						let conment_list = res.result.data.map((el,index) => {
+							return {
+								_id: el._id,
+								news_hotword: el.news_hotword,
+								"COMMENT_TIME": this.$options.filters['timefliter'](el.comment_date),
+								"FIRSTNICKNAME": el.userInfo[0].nickname || el.userInfo[0].username,
+								"IS_PRAISE": el.is_praise, // 是否赞过
+								"COMMENT": el.comment_content,
+								"PRAISE_NUM": el.praise_num, // 赞数
+								"CANDELETE": 0,
+								"HEADIMGURL": el.userInfo[0].headimg,
+								"PARENTID": "", 
+								"SECONDNICKNAME": 123,
+								// "CHILD_ANWSER_LIST":el.child_anwser_list,
+								"CHILD_ANWSER_LIST":[]
+								
+							}
+						})
+						console.log('conment_list', conment_list)
+						// this.commentList = this.pageData.page == 0 ? conment_list : this.commentList.concat(
+						// 	conment_list);
+						 this.commentList  = conment_list
+						 console.log("this.commentList",this.commentList)
 					}
 				}).catch((err) => {
 					uni.hideLoading()
@@ -197,10 +280,9 @@
 						success: function(res) {
 							if (res.confirm) {
 								console.log('用户点击确定');
-								// uni.switchTab({
-								//     url: '/pages/login/login'
-								// });
-								that.openPage('login/login')
+								uni.navigateTo({
+									url: '/pages/login/login'
+								});
 							} else if (res.cancel) {
 								console.log('用户点击取消');
 							}

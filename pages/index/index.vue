@@ -61,7 +61,7 @@
 		mounted() {
 			this.get()
 			// this.$refs.DrawerLeft.open()
-			this.showDrawer()
+			// this.showDrawer()
 		},
 		onShow() {
 			console.log('show Index')
@@ -86,7 +86,7 @@
 			this.scrollTop = e.scrollTop;
 		},
 		methods: {
-			...mapMutations(['setUserInfo']), // 验证登录 和 注销登录方法
+			...mapMutations(['setUserInfo']),
 			start(e) {
 				// console.log(e)
 				this.startData.clientX = e.changedTouches[0].clientX;

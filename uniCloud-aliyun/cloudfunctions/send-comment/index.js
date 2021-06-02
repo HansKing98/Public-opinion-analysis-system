@@ -5,9 +5,14 @@ exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
 	let res = {}
-
+	let data = {
+		...event,
+		praise_num: 0,
+		is_praise: null,
+		child_anwser_list: []
+	}
 	if (event['user_id'] && event['news_hotword']) {
-		let add = await collection.add(event)
+		let add = await collection.add(data)
 		res = {
 			code: 0,
 			'_id': add.id,
