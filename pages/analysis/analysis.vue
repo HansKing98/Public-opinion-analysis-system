@@ -140,19 +140,8 @@
 				// 		"HEADIMGURL": "",
 				// 		"SECONDNICKNAME": ""
 				// 	}]
-				// },{
-				// 	"COMMENT_TIME": "2020/1/2 10:01",
-				// 	"FIRSTNICKNAME": "nickname",
-				// 	"IS_PRAISE": null,
-				// 	"COMMENT": "xxx",
-				// 	"PRAISE_NUM": 10,
-				// 	"CANDELETE": 0,
-				// 	"HEADIMGURL": "https://img-cdn-aliyun.dcloud.net.cn/stream/plugin_screens/52f83b00-8ac3-11ea-92e4-6962457f811b_0.jpg?v=1588238334",
-				// 	"PARENTID": "",
-				// 	"SECONDNICKNAME": null,
-				// 	"CHILD_ANWSER_LIST": []
 				// }]
-				commentList:[]
+				commentList: []
 			}
 		},
 		onLoad(option) {
@@ -193,10 +182,28 @@
 			// }
 		},
 		onShow() {
-
+			// 
+			this.getUserInfo()
 		},
 		methods: {
 			...mapMutations(['setUserInfo']),
+			clickPraiseComment(e){
+				let that = this
+				uniCloud.callFunction({
+					name: 'set-praise',
+					data: {
+						"comment_id": "60b7874c1ccee700015d5f8e",
+						"user_id": "60b1f6bfa30ce800016fb599",
+						"type": "praise"
+					},
+					success(res) {
+						console.log('res',res)
+						that.getComment() //刷新
+					},complete(e){
+
+					}
+				})
+			},
 			getUserInfo() {
 				// 通过比对 token 检查用户登录信息
 				let that = this
@@ -227,14 +234,14 @@
 						pageSize: this.pageData.pageSize
 					}
 				}).then((res) => {
-					console.log('comment:', res.result.data)
+					// console.log('comment:', res.result.data)
 					if (this.pageData.page == 0 && res.result.data.length == 0) {
 						uni.showToast({
 							title: '未发现评论',
 							icon: "none"
 						})
 					} else {
-						let conment_list = res.result.data.map((el,index) => {
+						let conment_list = res.result.data.map((el, index) => {
 							return {
 								_id: el._id,
 								news_hotword: el.news_hotword,
@@ -245,18 +252,18 @@
 								"PRAISE_NUM": el.praise_num, // 赞数
 								"CANDELETE": 0,
 								"HEADIMGURL": el.userInfo[0].headimg,
-								"PARENTID": "", 
+								"PARENTID": "",
 								"SECONDNICKNAME": 123,
 								// "CHILD_ANWSER_LIST":el.child_anwser_list,
-								"CHILD_ANWSER_LIST":[]
-								
+								"CHILD_ANWSER_LIST": []
+
 							}
 						})
-						console.log('conment_list', conment_list)
-						// this.commentList = this.pageData.page == 0 ? conment_list : this.commentList.concat(
-						// 	conment_list);
-						 this.commentList  = conment_list
-						 console.log("this.commentList",this.commentList)
+						// console.log('conment_list', conment_list)
+						this.commentList = this.pageData.page == 0 ? conment_list : this.commentList.concat(
+							conment_list);
+						// this.commentList = conment_list
+						// console.log("this.commentList",this.commentList)
 					}
 				}).catch((err) => {
 					uni.hideLoading()
