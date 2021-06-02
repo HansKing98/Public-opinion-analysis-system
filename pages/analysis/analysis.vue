@@ -47,6 +47,22 @@
 				:animation="true" :opts="{title:{name:'女'}}" />
 		</view>
 
+		<view class="footer-bar">
+			<view class="u-flex my-page-footer">
+				<view class="footer-action" @click="goBack">
+					<u-icon name="arrow-left" size="36"></u-icon>
+				</view>
+				<view class="u-flex-1">
+					<u-search v-model="comment" placeholder="说两句..." search-icon="chat" :show-action="false"></u-search>
+				</view>
+				<view class="footer-action" @click="sendComment">
+					<u-icon name="arrow-upward" size="36"></u-icon>
+				</view>
+				<view class="footer-action" @click="favo =!favo">
+					<u-icon :name="!favo?'star':'star-fill'" :color="favo?'#f39c12':''" size="36"></u-icon>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -65,7 +81,14 @@
 		makeHotTrend,
 		emotionSex2
 	} from '@/utils/index.js'
+
+	import {
+		mapState
+	} from 'vuex'
+
 	export default {
+		components: {},
+		computed: mapState(['hasLogin', 'userInfo']),
 		data() {
 			return {
 				hotword: "",
@@ -80,15 +103,37 @@
 				errorMsgEmotion: null,
 				errorMsgwordCloud: null,
 				errorMsgHotTrend: null,
-				startData: {}
+				startData: {},
+				comment: '',
+				favo: false,
+				pageData: {
+					page: 0,
+					pageSize: 30
+				},
 			}
 		},
 		onLoad(option) {
 			// console.log("hotword", option.hotword)
-			this.hotword = option.hotword
-			uni.setNavigationBarTitle({
-				title: option.hotword
-			});
+			if (!option.hotword) {
+				uni.showToast({
+					icon: 'none',
+					title: "页面参数缺失，正在返回首页...",
+					success: function(res) {
+						setTimeout(function() {
+							uni.navigateTo({
+								url: '/pages/index/index'
+							});
+						}, 1000)
+					}
+				})
+			} else {
+				this.hotword = option.hotword
+				uni.setNavigationBarTitle({
+					title: option.hotword
+				});
+				this.getComment()
+			}
+
 		},
 		onReady() {
 			//模拟从服务器获取数据
@@ -107,6 +152,105 @@
 
 		},
 		methods: {
+			// 返回
+			goBack() {
+				uni.navigateBack();
+			},
+			getComment() {
+				uniCloud.callFunction({
+					name: 'get-comment',
+					data: {
+						'news_hotword': this['hotword'],
+						page: this.pageData.page,
+						pageSize: this.pageData.pageSize
+					}
+				}).then((res) => {
+					console.log('comment:', res)
+					if (this.pageData.page == 0 && res.result.data.length == 0) {
+						// uni.showToast({
+						// 	title: '未发现评论',
+						// 	icon: "none"
+						// })
+					} else {
+						let list = res.result.data
+						this.listData = this.pageData.page == 0 ? list : this.listData.concat(list);
+					}
+				}).catch((err) => {
+					uni.hideLoading()
+					uni.showModal({
+						content: `查询失败，错误信息为：${err.message}`,
+						showCancel: false
+					})
+					console.error(err)
+				}).finally(() => {
+					this.listLoading = false
+				})
+			},
+			async sendComment() {
+
+				if (!this.hasLogin) {
+					let that = this
+					uni.showModal({
+						showCancel: false,
+						content: '暂未登录，是否跳转到我的',
+						showCancel: true,
+						success: function(res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+								// uni.switchTab({
+								//     url: '/pages/login/login'
+								// });
+								that.openPage('login/login')
+							} else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					})
+				} else {
+					if (!this.comment) {
+						uni.showModal({
+							showCancel: false,
+							content: '在评论区说两句吧。'
+						})
+					} else {
+						// console.log(this.comment)
+						let that = this
+
+
+						let data = {
+							'user_id': that.userInfo._id,
+							'news_hotword': that['hotword'],
+							'comment_content': that.comment,
+							'comment_date': new Date()
+						}
+						let self = that
+						console.log('data', data)
+						uniCloud.callFunction({
+							name: 'send-comment',
+							data,
+							success(res) {
+								console.log("res123", res)
+								if (res.result.code == 0) {
+									uni.showModal({
+										showCancel: false,
+										content: '评论成功'
+									})
+									self.comment = ''
+									self.getComment()
+								} else {
+									uni.showModal({
+										showCancel: false,
+										content: res.result.msg
+									})
+								}
+							},
+							fail(e) {
+								console.log("send-comment:faild", e)
+							}
+						})
+					}
+				}
+			},
 			start(e) {
 				// console.log(e)
 				this.startData.clientX = e.changedTouches[0].clientX;
@@ -303,6 +447,27 @@
 			width: 10rpx;
 			height: 10rpx;
 			background-color: red;
+		}
+	}
+</style>
+
+
+<style lang="scss" scoped>
+	.footer-bar {
+		position: fixed;
+		bottom: 0px;
+		// left: 0px;
+		z-index: 10000;
+		width: 750rpx;
+
+		.my-page-footer {
+			height: 48px;
+			background-color: $uni-bg-color-grey;
+			padding: 0 10rpx;
+
+			.footer-action {
+				padding: 0 20rpx;
+			}
 		}
 	}
 </style>

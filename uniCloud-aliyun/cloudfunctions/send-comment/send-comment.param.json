@@ -1,0 +1,8 @@
+// 本文件中的json内容将在云函数【运行】时作为参数传给云函数。
+// 配置教程参考：https://uniapp.dcloud.net.cn/uniCloud/quickstart?id=runparam
+{
+	"user_id": "60b1f6bfa30ce800016fb599",
+	"news_hotword": "刘涛 我现在的偶像是谢娜",
+	"comment_content": "123",
+	"comment_date": "2021-06-02T08:19:19.499Z"
+}
