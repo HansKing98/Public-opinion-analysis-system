@@ -64,8 +64,8 @@
 				<view class="footer-action" @click="sendComment">
 					<u-icon name="arrow-upward" size="36"></u-icon>
 				</view>
-				<view class="footer-action" @click="favo =!favo">
-					<u-icon :name="!favo?'star':'star-fill'" :color="favo?'#f39c12':''" size="36"></u-icon>
+				<view class="footer-action" @click="clickFavo">
+					<u-icon :name="!is_favo?'star':'star-fill'" :color="is_favo?'#f39c12':''" size="36"></u-icon>
 				</view>
 			</view>
 		</view>
@@ -141,7 +141,8 @@
 				// 		"SECONDNICKNAME": ""
 				// 	}]
 				// }]
-				commentList: []
+				commentList: [],
+				is_favo: false
 			}
 		},
 		onLoad(option) {
@@ -164,6 +165,7 @@
 					title: option.hotword
 				});
 				this.getComment()
+				this.getFavo()
 			}
 
 		},
@@ -187,7 +189,74 @@
 		},
 		methods: {
 			...mapMutations(['setUserInfo']),
+			// 提示跳转到登录页
+			navToLogin() {
+				let that = this
+				uni.showModal({
+					showCancel: false,
+					content: '暂未登录，是否跳转到我的',
+					showCancel: true,
+					success: function(res) {
+						if (res.confirm) {
+							console.log('用户点击确定');
+							uni.navigateTo({
+								url: '/pages/login/login'
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				})
+			},
+			getFavo() {
+				uniCloud.callFunction({
+					name: 'get-favo',
+					data: {
+						'hotword': this['hotword'],
+						'user_id': this.userInfo._id,
+					}
+				}).then((res) => {
+					console.log('ress', res.result.data.length)
+					if (res.result.data.length > 0) {
+						this.is_favo = true
+					} else {
+						this.is_favo = false
+					}
+					console.log('is_favo', this.is_favo)
+				})
+			},
+			clickFavo(e) {
+				console.log('clickFavo', e)
+				if (!this.hasLogin) {
+					this.navToLogin()
+					return
+				}
+				let that = this
+				uniCloud.callFunction({
+					name: 'set-favo',
+					data: {
+						"hotword": that['hotword'],
+						"user_id": that.userInfo._id,
+						"type": that.is_favo ? "unfavo" : "favo"
+					},
+					success(res) {
+						uni.showToast({
+							icon: 'none',
+							title: res.result.msg
+						});
+						console.log('res', res.result.msg)
+						// that.getComment() //刷新
+					},
+					complete(e) {
+						that.getFavo()
+					}
+				})
+			},
 			clickPraiseComment(e) {
+				if (!this.hasLogin) {
+					this.navToLogin()
+					return
+				}
 				// console.log(e)
 				let that = this
 				uniCloud.callFunction({
@@ -198,11 +267,14 @@
 						"type": e.IS_PRAISE ? "unlike" : "praise"
 					},
 					success(res) {
+						uni.showToast({
+							icon: 'none',
+							title: res.result.msg
+						});
 						console.log('res', res.result.msg)
-						that.getComment() //刷新
 					},
 					complete(e) {
-
+						that.getComment() //刷新
 					}
 				})
 
@@ -224,6 +296,11 @@
 						}
 					}
 				})
+			},
+			onPullDownRefresh() {
+				this.pageData.page = 0
+				this.getComment();
+
 			},
 			// 返回
 			goBack() {
@@ -303,27 +380,14 @@
 					console.error(err)
 				}).finally(() => {
 					this.listLoading = false
+					uni.stopPullDownRefresh()
 				})
 			},
 			async sendComment() {
 
 				if (!this.hasLogin) {
-					let that = this
-					uni.showModal({
-						showCancel: false,
-						content: '暂未登录，是否跳转到我的',
-						showCancel: true,
-						success: function(res) {
-							if (res.confirm) {
-								console.log('用户点击确定');
-								uni.navigateTo({
-									url: '/pages/login/login'
-								});
-							} else if (res.cancel) {
-								console.log('用户点击取消');
-							}
-						}
-					})
+					this.navToLogin()
+					return
 				} else {
 					if (!this.comment) {
 						uni.showModal({

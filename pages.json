@@ -15,7 +15,7 @@
 			"path": "pages/analysis/analysis",
 			"style": {
 				"navigationBarTitleText": "舆情分析",
-				"enablePullDownRefresh": false,
+				"enablePullDownRefresh": true,
 				"app-plus": {
 					"titleNView": {
 						"type": "transparent"
