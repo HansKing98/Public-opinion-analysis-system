@@ -83,7 +83,16 @@
 				"navigationBarBackgroundColor": "#000000"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/favo/favo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的收藏",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#F8F8F8",

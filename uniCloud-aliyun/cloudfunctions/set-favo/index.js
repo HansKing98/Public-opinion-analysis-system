@@ -14,19 +14,20 @@ exports.main = async (event, context) => {
 		// 	hotword
 		// }).count()
 
-		if (true) { 
+		if (true) {
 			if (event['type'] === "favo") {
 				let data = {
 					user_id,
-					hotword
+					hotword,
+					created_date: new Date()
 				}
 				// 添加一条数据
 				let add = await favo_collection.add(data)
-				
+
 				// await comment_collection.doc(hotword).update({
 				// 	praise_num: dbCmd.inc(1) // 自增1
 				// });
-				
+
 				res = {
 					code: 0,
 					'_id': add.id,

@@ -18,7 +18,8 @@ exports.main = async (event, context) => {
 			if (event['type'] === "praise") {
 				let data = {
 					user_id: event.user_id,
-					comment_id: event.comment_id
+					comment_id: event.comment_id,
+					created_date: new Date()
 				}
 				// 添加一条数据
 				let add = await praise_collection.add(data)

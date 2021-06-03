@@ -101,6 +101,10 @@
 					case 'setting':
 						url = '/pages/setting/setting'
 						break;
+						favorites
+					case 'favorites':
+						url = '/pages/favo/favo'
+						break;
 					default:
 						break;
 				}
