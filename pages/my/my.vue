@@ -15,7 +15,7 @@
 			<u-icon name="arrow-right" size="30" class="p-right-icon" v-if="!hasLogin"></u-icon>
 		</view>
 		<view class="n-p ripple" v-for="(item,index) in list" :key="index" hover-class="hover-class"
-			@click="onClick(item)" v-if=" !['logout', 'setting'].includes(item.type) || hasLogin">
+			@click="onClick(item)" v-if=" hasLogin">
 			<!-- ['logout','setting'] 选项，在登录后才显示 -->
 			<view style="position: relative">
 				<view class="p-left">

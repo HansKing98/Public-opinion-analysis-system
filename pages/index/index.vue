@@ -61,7 +61,7 @@
 		mounted() {
 			this.get()
 			// this.$refs.DrawerLeft.open()
-			this.showDrawer()
+			// this.showDrawer()
 		},
 		onShow() {
 			console.log('show Index')
