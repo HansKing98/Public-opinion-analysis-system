@@ -23,7 +23,7 @@ exports.main = async (event, context) => {
 				// 添加一条数据
 				let add = await praise_collection.add(data)
 				
-				comment_collection.doc(comment_id).update({
+				await comment_collection.doc(comment_id).update({
 					praise_num: dbCmd.inc(1) // 自增1
 				});
 				
@@ -39,7 +39,7 @@ exports.main = async (event, context) => {
 					comment_id
 				}).remove()
 
-				comment_collection.doc(event.comment_id).update({
+				await comment_collection.doc(event.comment_id).update({
 					praise_num: dbCmd.inc(-1) // 自减1
 				});
 				res = {
