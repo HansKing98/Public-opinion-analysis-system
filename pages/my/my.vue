@@ -59,12 +59,12 @@
 					iconBackground: '#398c0c',
 				}, {
 					name: '评论',
-					type: 'photoAlbum',
+					type: 'comment',
 					icon: 'more-circle-fill',
 					iconBackground: '#5e2d88',
 				}, {
 					name: '点赞',
-					type: 'cardPackage',
+					type: 'praise',
 					icon: 'thumb-up-fill',
 					iconBackground: '#33696c',
 				}, {
@@ -104,6 +104,15 @@
 						favorites
 					case 'favorites':
 						url = '/pages/favo/favo'
+						break;
+					case 'praise':
+						url = '/pages/favo/praise'
+						break;
+					case 'comment':
+						url = '/pages/favo/comment'
+						break;
+					case 'xiaoxi':
+						url = '/pages/favo/xiaoxi'
 						break;
 					default:
 						break;
