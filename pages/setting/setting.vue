@@ -225,14 +225,14 @@
 				let birthday = that.date;
 				let description = that.description;
 				let updata = {};
-				if (!nickname) {
-					uni.showToast({
-						title: '请填写昵称',
-						icon: 'none',
-						duration: 2000
-					});
-					return;
-				}
+				// if (!nickname) {
+				// 	uni.showToast({
+				// 		title: '请填写昵称',
+				// 		icon: 'none',
+				// 		duration: 2000
+				// 	});
+				// 	return;
+				// }
 				updata.nickname = nickname;
 				if (!headimg) {
 					headimg = that.headimg;
