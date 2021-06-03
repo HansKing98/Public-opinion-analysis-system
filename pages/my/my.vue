@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="personal ripple" @click="!hasLogin ? toLogin():toMydetail()">
+		<view class="personal" :class="!hasLogin?'ripple':''" @click="!hasLogin ? toLogin():toMydetail()">
 			<view class="personal-main">
 				<u-avatar :src="hasLogin ? userInfo.headimg :avatar" mode="square" size="120" class="u-avatar">
 				</u-avatar>
@@ -12,7 +12,7 @@
 					<view class="">点击头像登录</view>
 				</view>
 			</view>
-			<u-icon name="arrow-right" size="30" class="p-right-icon"></u-icon>
+			<u-icon name="arrow-right" size="30" class="p-right-icon" v-if="!hasLogin"></u-icon>
 		</view>
 		<view class="n-p ripple" v-for="(item,index) in list" :key="index" hover-class="hover-class"
 			@click="onClick(item)" v-if=" !['logout', 'setting'].includes(item.type) || hasLogin">
