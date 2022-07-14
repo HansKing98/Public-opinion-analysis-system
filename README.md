@@ -22,10 +22,12 @@
 
 ![App展示图片](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.57.55-ZqPrap.png)
 
-3. admin后台
+3. 分析图
+![分析展示](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-15%2000.00.24-38omrE.png)
+
+4. admin后台
 
    ![截屏2022-07-14 23.07.50](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.07.50-VFTE8h.png)
 
    ![截屏2022-07-14 23.08.33](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.08.33-w8hWCC.png)
 
-4. 应用推送和ota升级
