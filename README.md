@@ -14,13 +14,13 @@
 
 [App下载地址](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-30331736-ca44-457d-9711-10cf04b51729/a8333895-b52b-41a1-b48e-f40382fc1b26.apk)
 
-1. 首页
+1. App展示动图
 
-![截屏2022-07-14 23.06.04](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.06.04-oxmjkC.png)
+![App展示动图](https://image.hansking.cn/uPic/202207/Kapture%202022-07-14%20at%2023.54.02-VtsHvP.gif)
 
-2. 用户信息
+2. App展示图片
 
-![截屏2022-07-14 23.07.14](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.07.14-Hen6zu.png)
+![App展示图片](https://image.hansking.cn/uPic/202207/%E6%88%AA%E5%B1%8F2022-07-14%2023.57.55-ZqPrap.png)
 
 3. admin后台
 
